@@ -6,6 +6,7 @@ public class WeightsRecord {
     public String mExercise, mType;
     public int mSets, mReps;
     public float mWeight;
+    static ArrayList<WeightsRecord> mWeightsRecord;
 
     public WeightsRecord(String exercise, String type){
         mExercise = exercise;
@@ -42,7 +43,16 @@ public class WeightsRecord {
         return mWeight;
     }
 
+    public static ArrayList<WeightsRecord> createWeightsWorkout(int numExercises) {
+        mWeightsRecord = new ArrayList<WeightsRecord>();
 
+        for (int i = 1; i <= numExercises; i++) {
+            mWeightsRecord.add(new WeightsRecord("Ex A " + i, "Ty A " + i));
+
+        }
+
+        return mWeightsRecord;
+    }
 
 
 

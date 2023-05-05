@@ -50,10 +50,10 @@ public class WeightsAdapter extends
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.weights_workout_rv, parent, false);
+        View weightsWorkoutView = inflater.inflate(R.layout.weights_workout_rv, parent, false);
 
         // new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(weightsWorkoutView);
         return viewHolder;
     }
 
@@ -69,11 +69,11 @@ public class WeightsAdapter extends
         EditText typeEditView = holder.typeView;
         typeEditView.setText(weightsRecord.getType());
         EditText setsEditView = holder.setsView;
-        setsEditView.setText(weightsRecord.getSets());
+        setsEditView.setText(Integer.toString(weightsRecord.getSets()));
         EditText repsEditView = holder.repsView;
-        repsEditView.setText(weightsRecord.getReps());
+        repsEditView.setText(Integer.toString(weightsRecord.getReps()));
         EditText weightEditView = holder.weightView;
-        weightEditView.setText(String.valueOf(weightsRecord.getWeight()));
+        weightEditView.setText(Float.toString(weightsRecord.getWeight()));
 
     }
 
