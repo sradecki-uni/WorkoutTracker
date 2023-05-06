@@ -8,6 +8,10 @@ public class WeightsRecord {
     public float mWeight;
     static ArrayList<WeightsRecord> mWeightsRecord;
 
+    public WeightsRecord(){
+        //default constructor
+    }
+
     public WeightsRecord(String exercise, String type){
         mExercise = exercise;
         mType = type;
@@ -41,6 +45,26 @@ public class WeightsRecord {
 
     public float getWeight() {
         return mWeight;
+    }
+
+    public void setmExercise(String mExercise){
+        this.mExercise = mExercise;
+    }
+
+    public void setmType(String mType){
+        this.mType = mType;
+    }
+
+    public void setmSets(int mSets){
+        this.mSets = mSets;
+    }
+
+    public void setmReps(int mReps){
+        this.mReps = mReps;
+    }
+
+    public void setmWeight(float mWeight){
+        this.mWeight = mWeight;
     }
 
     public static ArrayList<WeightsRecord> createWeightsWorkout(int numExercises) {

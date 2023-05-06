@@ -1,14 +1,27 @@
 package com.example.workouttracker;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+import
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "workoutDB.db";
+    private static final String TABLE_WORKOUT = "weightWorkouts";
+
+    public static final String COLUMN_WEIGHTS_EXERCISE = "weightsExercise";
+    public static final String COLUMN_MTYPE = "mType";
+    public static final String COLUMN_SETS = "mSets";
+    public static final String COLUMN_REPS = "mreps";
+    public static final String COLUMN_WEIGHT = "mWeight";
+
+
+
 
     public DBHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -61,8 +74,71 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    db.execSQL("DROP TABLE IF EXISTS " + TYPE_TABLE);
+    onCreate(db);
+    }
+
+    public void addWeightsExercise( WeightsRecord wr){
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_MTYPE, wr.getType());
+        values.put(COLUMN_REPS, wr.getReps());
+        values.put(COLUMN_WEIGHT, wr.getWeight());
+        values.put(COLUMN_SETS, wr.getSets());
+        values.put(COLUMN_WEIGHTS_EXERCISE, wr.getExercise());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.insert(TABLE_WORKOUT, null, values);
+        db.close();
+    }
+
+    public WeightsRecord findWeightsExercise(String exercise){
+        String query = "SELECT * FROM" + TABLE_WORKOUT + "WHERE " + COLUMN_WEIGHTS_EXERCISE + " = \"" + exercise + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        WeightsRecord wr = new WeightsRecord();
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            wr.setmExercise(cursor.getString(0));
+            wr.setmExercise(cursor.getString(1));
+            wr.setmSets(Integer.parseInt(cursor.getString(2)));
+            wr.setmReps(Integer.parseInt(cursor.getString(3)));
+            wr.setmWeight(Integer.parseInt(cursor.getString(4)));
+
+
+        }
+        else{
+            wr = null;
+        }
+        db.close();
+        return wr;
 
     }
 
+    public boolean deleteWeightsRecord(String mWeight){
+        boolean result = false;
+
+        String query = "Select * From " + TABLE_WORKOUT + "WHERE " + COLUMN_WEIGHTS_EXERCISE + " = \"" + mWeight + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        WeightsRecord wr = new WeightsRecord();
+
+        if(cursor.moveToFirst()){
+            wr.setmWeight(Integer.parseInt(cursor.getString(0)));
+            db.delete(TABLE_WORKOUT,  COLUMN_WEIGHTS_EXERCISE + " = ?",
+                    new String [] {String.valueOf(product.getID())});
+            cursor.close();
+            result = true;
+
+        }
+        db.close();
+        return result;
+
+    }
 
 }
