@@ -6,5 +6,7 @@
     <string name="sets_text">Sets</string>
     <string name="reps_text">Reps</string>
     <string name="weight_text">Weight</string>
+    <string name="add_exercise_text">Add Exercise</string>
+    <string name="save_text">Save</string>
 
 </resources>
