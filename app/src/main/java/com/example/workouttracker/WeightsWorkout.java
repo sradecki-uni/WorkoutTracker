@@ -16,7 +16,7 @@ public class WeightsWorkout {
         mWeightsRecord = new ArrayList<WeightsRecord>();
 
         for (int i = 1; i <= numExercises; i++) {
-            mWeightsRecord.add(new WeightsRecord("Ex A " + i, "Ty A " + i));
+            mWeightsRecord.add(new WeightsRecord(i, "Ex A " + i, "Ty A " + i));
 
         }
 

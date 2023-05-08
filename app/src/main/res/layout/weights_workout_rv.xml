@@ -3,39 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="347dp"
-        android:layout_height="77dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.322"
+        app:layout_wrapBehaviorInParent="vertical_only"
         tools:ignore="MissingConstraints">
+
 
 
         <EditText
             android:id="@+id/w_exercise_input"
-            android:layout_width="0dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autofillHints=""
+            android:duplicateParentState="false"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textSize="14sp"
+            android:windowSoftInputMode="adjustResize"/>
 
         <EditText
             android:id="@+id/w_type_input"
-            android:layout_width="0dp"
+            android:layout_width="31dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autofillHints=""
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textSize="14sp"
+            android:windowSoftInputMode="adjustResize"/>
 
         <EditText
             android:id="@+id/w_sets_input"
@@ -44,7 +51,9 @@
             android:layout_weight="1"
             android:importantForAutofill="no"
             android:inputType="number"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textSize="14sp"
+            android:windowSoftInputMode="adjustResize"/>
 
         <EditText
             android:id="@+id/w_reps_input"
@@ -53,7 +62,9 @@
             android:layout_weight="1"
             android:importantForAutofill="no"
             android:inputType="number"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textSize="14sp"
+            android:windowSoftInputMode="adjustResize"/>
 
         <EditText
             android:id="@+id/w_weight_input"
@@ -62,7 +73,9 @@
             android:layout_weight="1"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textSize="14sp"
+            android:windowSoftInputMode="adjustResize"/>
 
 
     </LinearLayout>

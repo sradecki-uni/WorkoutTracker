@@ -39,8 +39,8 @@ public class WeightsAdapter extends
     private List<WeightsRecord> mWeightsWorkout;
 
     // pass weights records array into the constructor
-    public WeightsAdapter(List<WeightsRecord> contacts) {
-        mWeightsWorkout = contacts;
+    public WeightsAdapter(List<WeightsRecord> wRecords) {
+        mWeightsWorkout = wRecords;
     }
 
     // inflate weights_workout_rv XML file and return the holder

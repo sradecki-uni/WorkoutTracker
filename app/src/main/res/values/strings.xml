@@ -2,5 +2,9 @@
     <string name="app_name">WorkoutTracker</string>
     <string name="weights_workout">Weights Workout</string>
     <string name="exercise_text">Name</string>
+    <string name="type_text">Type</string>
+    <string name="sets_text">Sets</string>
+    <string name="reps_text">Reps</string>
+    <string name="weight_text">Weight</string>
 
 </resources>

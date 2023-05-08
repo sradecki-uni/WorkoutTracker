@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-import
+// import
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -15,12 +15,12 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_WORKOUT = "weightWorkouts";
 
     public static final String COLUMN_WEIGHTS_EXERCISE = "weightsExercise";
-    public static final String COLUMN_MTYPE = "mType";
-    public static final String COLUMN_SETS = "mSets";
-    public static final String COLUMN_REPS = "mreps";
-    public static final String COLUMN_WEIGHT = "mWeight";
-
-
+    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_SETS = "sets";
+    public static final String COLUMN_REPS = "reps";
+    public static final String COLUMN_WEIGHT = "weight";
+    public static final String COLUMN_ID = "id";
+    private static final String TYPE_TABLE = "";
 
 
     public DBHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -80,7 +80,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addWeightsExercise( WeightsRecord wr){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_MTYPE, wr.getType());
+        values.put(COLUMN_TYPE, wr.getType());
         values.put(COLUMN_REPS, wr.getReps());
         values.put(COLUMN_WEIGHT, wr.getWeight());
         values.put(COLUMN_SETS, wr.getSets());
@@ -101,11 +101,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            wr.setmExercise(cursor.getString(0));
+            wr.setId(cursor.getInt(0));
             wr.setmExercise(cursor.getString(1));
-            wr.setmSets(Integer.parseInt(cursor.getString(2)));
-            wr.setmReps(Integer.parseInt(cursor.getString(3)));
-            wr.setmWeight(Integer.parseInt(cursor.getString(4)));
+            wr.setmType(cursor.getString(2));
+            wr.setmSets(Integer.parseInt(cursor.getString(3)));
+            wr.setmReps(Integer.parseInt(cursor.getString(4)));
+            wr.setmWeight(Integer.parseInt(cursor.getString(5)));
 
 
         }
@@ -129,9 +130,9 @@ public class DBHandler extends SQLiteOpenHelper {
         WeightsRecord wr = new WeightsRecord();
 
         if(cursor.moveToFirst()){
-            wr.setmWeight(Integer.parseInt(cursor.getString(0)));
+            wr.setId(Integer.parseInt(cursor.getString(0)));
             db.delete(TABLE_WORKOUT,  COLUMN_WEIGHTS_EXERCISE + " = ?",
-                    new String [] {String.valueOf(product.getID())});
+                    new String [] {String.valueOf(wr.getId())});
             cursor.close();
             result = true;
 

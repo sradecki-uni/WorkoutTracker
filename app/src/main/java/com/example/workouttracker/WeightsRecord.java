@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class WeightsRecord {
     public String mExercise, mType;
-    public int mSets, mReps;
+    public int mSets, mReps, mId;
     public float mWeight;
     static ArrayList<WeightsRecord> mWeightsRecord;
 
@@ -12,14 +12,16 @@ public class WeightsRecord {
         //default constructor
     }
 
-    public WeightsRecord(String exercise, String type){
+    public WeightsRecord(int id, String exercise, String type){
+        mId = id;
         mExercise = exercise;
         mType = type;
         mSets = 1;
         mReps = 1;
         mWeight = 0.0F;
     }
-    public WeightsRecord(String exercise, String type, int sets, int reps, float weight){
+    public WeightsRecord(int id, String exercise, String type, int sets, int reps, float weight){
+        mId = id;
         mExercise = exercise;
         mType = type;
         mSets = sets;
@@ -29,6 +31,9 @@ public class WeightsRecord {
 
     public String getExercise() {
         return mExercise;
+    }
+    public int getId() {
+        return mId;
     }
 
     public String getType() {
@@ -67,11 +72,15 @@ public class WeightsRecord {
         this.mWeight = mWeight;
     }
 
+    public void setId(int Id) {
+        this.mId = Id;
+    }
+
     public static ArrayList<WeightsRecord> createWeightsWorkout(int numExercises) {
         mWeightsRecord = new ArrayList<WeightsRecord>();
 
         for (int i = 1; i <= numExercises; i++) {
-            mWeightsRecord.add(new WeightsRecord("Ex A " + i, "Ty A " + i));
+            mWeightsRecord.add(new WeightsRecord(i, "Ex A " + i, "Ty A " + i));
 
         }
 
