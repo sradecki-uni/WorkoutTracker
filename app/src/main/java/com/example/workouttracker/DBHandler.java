@@ -3,6 +3,7 @@ package com.example.workouttracker;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -56,11 +57,11 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_E_TYPE_TABLE = "CREATE TABLE e_type (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ON CONFLICT IGNORE, " +
                 "name TEXT NOT NULL UNIQUE);";
 
         String CREATE_E_EXERCISE_TABLE = "CREATE TABLE e_exercise (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ON CONFLICT IGNORE, " +
                 "name TEXT NOT NULL UNIQUE);";
 
         String CREATE_E_WORKOUT_TABLE = "CREATE TABLE e_workout (" +
@@ -69,8 +70,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String CREATE_E_WEIGHTS_TABLE = "CREATE TABLE e_weights (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
-                "sets UNSIGNED INTEGER DEFAULT 1, " +
-                "reps UNSIGNED INTEGER DEFAULT 1, " +
+                "sets UNSIGNED INTEGER DEFAULT 0, " +
+                "reps UNSIGNED INTEGER DEFAULT 0, " +
                 "weight UNSIGNED FLOAT DEFAULT 0.0 );";
 
         String CREATE_E_CARDIO_TABLE = "CREATE TABLE e_cardio (" +
@@ -79,14 +80,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 "distance UNSIGNED FLOAT DEFAULT 0.0 );";
 
         String CREATE_R_EXERCISE_TYPE_TABLE = "CREATE TABLE r_exercise_type (" +
-                "exerciseID INTEGER UNIQUE, " +
+                "exerciseID INTEGER UNIQUE ON CONFLICT IGNORE, " +
                 "typeID INTEGER);";
 
         String CREATE_R_WORKOUT_EXERCISE_TABLE = "CREATE TABLE r_workout_exercise (" +
                 "workoutID INTEGER, " +
                 "exerciseID INTEGER, " +
                 "cardioID INTEGER, " +
-                "weightsID INTEGER);";
+                "weightsID INTEGER);" ;
 
         db.execSQL(CREATE_E_TYPE_TABLE);
         db.execSQL(CREATE_E_EXERCISE_TABLE);
@@ -137,8 +138,15 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values_exercise = new ContentValues();
         values_exercise.put(COLUMN_NAME, wr.getExercise());
 
-        SQLiteDatabase db = this.getWritableDatabase();;
-        db.insert(TABLE_EXERCISE, null, values_exercise);
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.insertOrThrow(TABLE_EXERCISE, null, values_exercise);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
         db.close();
     }
 
@@ -148,7 +156,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.insert(TABLE_WORKOUT, null, values);
+        try {
+            db.insert(TABLE_WORKOUT, null, values);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
         db.close();
     }
 
@@ -217,27 +231,39 @@ public class DBHandler extends SQLiteOpenHelper {
     public void addRelationExerciseType(int typeID, int exerciseID){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Create a new map of values, where column names are the keys
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_EXERCISID, exerciseID);
         values.put(COLUMN_TYPEID, typeID);
 
         // Insert the new row, returning the primary key value of the new row
-        db.insert(TABLE_EXERCISE_TYPE,null,values);
+        try {
+            db.insertOrThrow(TABLE_EXERCISE_TYPE,null,values);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
         db.close();
     }
 
     public void addRelationWorkoutExerciseWeights(int workoutID, int exerciseID, int weightsID){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(COLUMN_EXERCISID, exerciseID);
         values.put(COLUMN_WORKOUTID, workoutID);
         values.put(COLUMN_WEIGHTSID, weightsID);
 
-        // Insert the new row, returning the primary key value of the new row
-        db.insert(TABLE_WORKOUT_EXERCISE,null,values);
+        try {
+            db.insertOrThrow(TABLE_WORKOUT_EXERCISE,null,values);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
         db.close();
     }
 

@@ -90,15 +90,14 @@ public class WeightsInput extends AppCompatActivity {
 //    }
 
     public void addExercise(View view){
-//        // save last record input
-//        WeightsRecord previous = weightsWorkout.get(weightsWorkout.size() - 1);
-//        wAdapter.onBindViewHolder();
-//        previous.setmExercise();
+
+
         // add new empty record
-        weightsWorkout.add(new WeightsRecord());
+        //weightsWorkout.add(new WeightsRecord());
+        wAdapter.mWeightsWorkout.add(new WeightsRecord());
         // notify the adapter to show on screen
 //        wAdapter.notifyDataSetChanged();
-        wAdapter.notifyItemInserted(weightsWorkout.size());
+        wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
 
     }
 
@@ -131,8 +130,8 @@ public class WeightsInput extends AppCompatActivity {
         // for each new record to be saved, iterate through list array and add to e_weights
         // and e_exercise table, note names in e_exercise table are unique so wont get added
         // if have been previously added
-        for(int i = 0; i < weightsWorkout.size(); i++){
-            WeightsRecord record = weightsWorkout.get(i);
+        for(int i = 0; i < wAdapter.mWeightsWorkout.size(); i++){
+            WeightsRecord record = wAdapter.mWeightsWorkout.get(i);
             // add record to e_weights and e_exercise table
             dbHandler.addWeights(record);
             dbHandler.addExercise(record);
