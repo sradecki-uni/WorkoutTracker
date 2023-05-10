@@ -6,10 +6,16 @@ public class WeightsRecord {
     public String mExercise, mType;
     public int mSets, mReps, mId;
     public float mWeight;
-    static ArrayList<WeightsRecord> mWeightsRecord;
+    // initialise empty array list
+    static ArrayList<WeightsRecord> mWeightsRecord = new ArrayList<WeightsRecord>();
 
     public WeightsRecord(){
-        //default constructor
+        mId = 0;
+        mExercise = "";
+        mType = "";
+        mSets = 0;
+        mReps = 0;
+        mWeight = 0.0F;
     }
 
     public WeightsRecord(int id, String exercise, String type){
@@ -76,16 +82,16 @@ public class WeightsRecord {
         this.mId = Id;
     }
 
-    public static ArrayList<WeightsRecord> createWeightsWorkout(int numExercises) {
-        mWeightsRecord = new ArrayList<WeightsRecord>();
-
-        for (int i = 1; i <= numExercises; i++) {
-            mWeightsRecord.add(new WeightsRecord(i, "Ex A " + i, "Ty A " + i));
-
-        }
-
-        return mWeightsRecord;
-    }
+//    public static ArrayList<WeightsRecord> createWeightsWorkout(int numExercises) {
+//        mWeightsRecord = new ArrayList<WeightsRecord>();
+//
+//        for (int i = 1; i <= numExercises; i++) {
+//            mWeightsRecord.add(new WeightsRecord(i, "Ex A " + i, "Ty A " + i));
+//
+//        }
+//
+//        return mWeightsRecord;
+//    }
 
 
 
