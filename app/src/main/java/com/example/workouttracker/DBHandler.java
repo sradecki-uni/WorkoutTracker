@@ -80,7 +80,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String CREATE_R_EXERCISE_TYPE_TABLE = "CREATE TABLE r_exercise_type (" +
                 "exerciseID INTEGER UNIQUE, " +
-                "typeID UNIQUE);";
+                "typeID INTEGER);";
 
         String CREATE_R_WORKOUT_EXERCISE_TABLE = "CREATE TABLE r_workout_exercise (" +
                 "workoutID INTEGER, " +
