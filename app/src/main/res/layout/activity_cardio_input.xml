@@ -8,31 +8,16 @@
     >
 
     <TextView
-        android:id="@+id/sets_header_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sets_text"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.580"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
-
-    <TextView
         android:id="@+id/time_header_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/reps_text"
+        android:text="@string/time_text"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.730"
+        app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.257" />
@@ -41,13 +26,13 @@
         android:id="@+id/distance_header_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/weight_text"
+        android:text="@string/Distance_text"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.907"
+        app:layout_constraintHorizontal_bias="0.889"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.257" />
@@ -71,7 +56,7 @@
         android:id="@+id/cardio_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/weights_workout"
+        android:text="@string/cardiio_workout"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -82,7 +67,7 @@
         app:layout_constraintVertical_bias="0.083" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_weights"
+        android:id="@+id/rv_cardio"
         android:layout_width="359dp"
         android:layout_height="403dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,21 +76,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9" />
-
-    <TextView
-        android:id="@+id/type_header_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/type_text"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
 
     <TextView
         android:id="@+id/name_header_view"
@@ -131,7 +101,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.19"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.146" />

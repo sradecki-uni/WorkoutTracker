@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">WorkoutTracker</string>
     <string name="weights_workout">Weights Workout</string>
+    <string name="cardiio_workout">Cardio Workout</string>
     <string name="exercise_text">Name</string>
     <string name="type_text">Type</string>
     <string name="sets_text">Sets</string>
@@ -8,5 +9,7 @@
     <string name="weight_text">Weight</string>
     <string name="add_exercise_text">Add Exercise</string>
     <string name="save_text">Save</string>
+    <string name="time_text">Time</string>
+    <string name="Distance_text">Distance (km)</string>
 
 </resources>

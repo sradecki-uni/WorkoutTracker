@@ -31,6 +31,11 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
 
+    // e_cardio record fields
+    public static final String COLUMN_TIME = "time";
+    public static final String COLUMN_DISTANCE = "distance";
+
+
     // used for id field in all entity tables
     public static final String COLUMN_ID = "id";
 
@@ -143,9 +148,36 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addCardio( CardioRecord cr){
+        ContentValues values_weights = new ContentValues();
+        values_weights.put(COLUMN_TIME, cr.getmTime());
+        values_weights.put(COLUMN_DISTANCE, cr.getmDistance());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.insert(TABLE_CARDIO, null, values_weights);
+        db.close();
+    }
+
     public void addExercise( WeightsRecord wr){
         ContentValues values_exercise = new ContentValues();
         values_exercise.put(COLUMN_NAME, wr.getExercise());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.insertOrThrow(TABLE_EXERCISE, null, values_exercise);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
+        db.close();
+    }
+
+    public void addExercise( CardioRecord cr){
+        ContentValues values_exercise = new ContentValues();
+        values_exercise.put(COLUMN_NAME, cr.getExercise());
 
         SQLiteDatabase db = this.getWritableDatabase();
         try {
@@ -211,6 +243,23 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
     }
 
+    public int getNewestECardioID(){
+        int id;
+        try {
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_CARDIO;
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
+        }
+        catch (Exception e){
+            // if no entries are in the database
+            id = 1;
+        }
+        return id;
+    }
+
     public int getExerciseID(WeightsRecord wr){
         int id;
         try {
@@ -229,11 +278,47 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
     }
 
+    public int getExerciseID(CardioRecord cr){
+        int id;
+        try {
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_EXERCISE + " WHERE "
+                    + COLUMN_NAME + " = '"  + cr.getExercise() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
+        }
+        catch (Exception e){
+            // if no entries are in the database
+            id = 1;
+        }
+        return id;
+    }
+
     public int getTypeID(WeightsRecord wr){
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
                     + COLUMN_NAME + " = '"  + wr.getType() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
+        }
+        catch (Exception e){
+            // if no entries are in the database
+            id = 1;
+        }
+        return id;
+    }
+
+    public int getTypeID(CardioRecord cr){
+        int id;
+        try {
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
+                    + COLUMN_NAME + " = '"  + cr.getmType() + "'";
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
@@ -274,6 +359,25 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_EXERCISID, exerciseID);
         values.put(COLUMN_WORKOUTID, workoutID);
         values.put(COLUMN_WEIGHTSID, weightsID);
+
+        try {
+            db.insertOrThrow(TABLE_WORKOUT_EXERCISE,null,values);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
+        db.close();
+    }
+
+    public void addRelationWorkoutExerciseCardio(int workoutID, int exerciseID, int cardioID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EXERCISID, exerciseID);
+        values.put(COLUMN_WORKOUTID, workoutID);
+        values.put(COLUMN_CARDIOID, cardioID);
 
         try {
             db.insertOrThrow(TABLE_WORKOUT_EXERCISE,null,values);

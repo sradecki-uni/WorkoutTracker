@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    public void newCardioWorkout(View view){
+        Intent myIntent = new Intent(this, CardioInput.class);
+
+        startActivity(myIntent);
+    }
+
     public void addWeightsExercise(View view){
 
     }

@@ -12,6 +12,10 @@
         android:theme="@style/Theme.WorkoutTracker"
         tools:targetApi="31">
         <activity
+            android:name=".CardioInput"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".WeightsInput"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>

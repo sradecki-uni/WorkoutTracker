@@ -191,16 +191,6 @@ public class WeightsAdapter extends
         EditText weightEditView = holder.weightView;
         weightEditView.setText(Float.toString(weightsRecord.getWeight()));
 
-//        EditText exerciseEditView = holder.exerciseView;
-//        weightsRecord.setmExercise(exerciseEditView.getText().toString());
-//        EditText typeEditView = holder.typeView;
-//        weightsRecord.setmType(typeEditView.getText().toString());
-//        EditText setsEditView = holder.setsView;
-//        weightsRecord.setmSets(Integer.parseInt(setsEditView.getText().toString()));
-//        EditText repsEditView = holder.repsView;
-//        weightsRecord.setmReps(Integer.parseInt(repsEditView.getText().toString()));
-//        EditText weightEditView = holder.weightView;
-//        weightsRecord.setmWeight(Float.parseFloat(weightEditView.getText().toString()));
 
     }
 
