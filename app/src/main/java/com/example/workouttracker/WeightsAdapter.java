@@ -1,6 +1,7 @@
 package com.example.workouttracker;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -110,6 +111,8 @@ public class WeightsAdapter extends
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    // if string not empty, get the text from the view and save in to
+                    // weights record object
                     if (!"".equals(repsView.getText().toString())) {
                         mWeightsWorkout.get(getAdapterPosition()).
                                 setmReps(Integer.parseInt(repsView.getText().toString()));
@@ -131,6 +134,8 @@ public class WeightsAdapter extends
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    // if string not empty, get the text from the view and save in to
+                    // weights record object
                     if (!"".equals(weightView.getText().toString())) {
                         mWeightsWorkout.get(getAdapterPosition()).
                                 setmWeight(Float.parseFloat(weightView.getText().toString()));

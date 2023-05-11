@@ -28,10 +28,11 @@
             android:layout_weight="1"
             android:autofillHints=""
             android:duplicateParentState="false"
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:minHeight="48dp"
             android:textSize="14sp"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            />
 
         <EditText
             android:id="@+id/w_type_input"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autofillHints=""
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:minHeight="48dp"
             android:textSize="14sp"
             android:windowSoftInputMode="adjustResize"/>

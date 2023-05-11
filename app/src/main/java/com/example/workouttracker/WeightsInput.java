@@ -67,7 +67,8 @@ public class WeightsInput extends AppCompatActivity {
         rvWeights.setLayoutManager(new LinearLayoutManager(this));
 
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
-
+        // on create, create predefined type table
+        dbHandler.createTypeTable();
 
 
 

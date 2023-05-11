@@ -57,12 +57,12 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_E_TYPE_TABLE = "CREATE TABLE e_type (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ON CONFLICT IGNORE, " +
-                "name TEXT NOT NULL UNIQUE);";
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "name TEXT NOT NULL UNIQUE ON CONFLICT IGNORE);";
 
         String CREATE_E_EXERCISE_TABLE = "CREATE TABLE e_exercise (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ON CONFLICT IGNORE, " +
-                "name TEXT NOT NULL UNIQUE);";
+                "name TEXT NOT NULL UNIQUE ON CONFLICT IGNORE);";
 
         String CREATE_E_WORKOUT_TABLE = "CREATE TABLE e_workout (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
@@ -97,15 +97,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_R_EXERCISE_TYPE_TABLE);
         db.execSQL(CREATE_R_WORKOUT_EXERCISE_TABLE);
 
-        // create predefined types for type tables
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, "Chest");
-        values.put(COLUMN_NAME, "Arms");
-        values.put(COLUMN_NAME, "Abs");
-        values.put(COLUMN_NAME, "Shoulders");
-        values.put(COLUMN_NAME, "Legs");
-        values.put(COLUMN_NAME, "Cardio");
-        db.insert(TABLE_TYPE, null, values);
     }
 
     @Override
@@ -120,7 +111,25 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+    public void createTypeTable(){
+        SQLiteDatabase db_write = this.getWritableDatabase();
 
+        // create predefined types for type tables
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, "Chest");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Arms");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Abs");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Shoulders");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Legs");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Cardio");
+        db_write.insert(TABLE_TYPE, null, values);
+        db_write.close();
+    }
     public void addWeights( WeightsRecord wr){
         ContentValues values_weights = new ContentValues();
         values_weights.put(COLUMN_REPS, wr.getReps());
@@ -169,25 +178,31 @@ public class DBHandler extends SQLiteOpenHelper {
     public int getNewestEWorkoutID(){
         int id;
         try {
-            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WORKOUT + ";";
-            SQLiteDatabase db = this.getWritableDatabase();
+//            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WORKOUT ;
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WORKOUT ;
+            SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);
-            id = Integer.parseInt(cursor.getString(0));
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
         }
         catch (Exception e){
             // if no entries are in the database
             id = 1;
         }
+
         return id;
     }
 
     public int getNewestEWeightsID(){
         int id;
         try {
-            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WEIGHTS + ";";
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WEIGHTS;
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
-            id = Integer.parseInt(cursor.getString(0));
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
         }
         catch (Exception e){
             // if no entries are in the database
@@ -200,10 +215,12 @@ public class DBHandler extends SQLiteOpenHelper {
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_EXERCISE + " WHERE "
-                    + COLUMN_NAME + " = \""  + wr.getExercise() + "\"";
+                    + COLUMN_NAME + " = '"  + wr.getExercise() + "'";
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
-            id = Integer.parseInt(cursor.getString(0));
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
         }
         catch (Exception e){
             // if no entries are in the database
@@ -216,10 +233,12 @@ public class DBHandler extends SQLiteOpenHelper {
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
-                    + COLUMN_NAME + " = \""  + wr.getType() + "\"";
+                    + COLUMN_NAME + " = '"  + wr.getType() + "'";
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
-            id = Integer.parseInt(cursor.getString(0));
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+            db.close();
         }
         catch (Exception e){
             // if no entries are in the database
