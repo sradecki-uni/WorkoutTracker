@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.257" />
 
     <TextView
-        android:id="@+id/time_header_view"
+        android:id="@+id/reps_header_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/reps_text"
@@ -38,7 +38,7 @@
         app:layout_constraintVertical_bias="0.257" />
 
     <TextView
-        android:id="@+id/distance_header_view"
+        android:id="@+id/weights_header_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weight_text"
