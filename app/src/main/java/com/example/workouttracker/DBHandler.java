@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 // import
@@ -439,6 +440,29 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return result;
+
+    }
+
+    public ArrayList<CardioRecord> getLongestCardioSessions(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cardioRecords
+                = db.rawQuery("SELECT * FROM " + TABLE_CARDIO, null);
+        ArrayList<CardioRecord> cardioRecordsArrayList
+                = new ArrayList<>();
+        if (cardioRecords.moveToFirst()) {
+            do {
+                // on below line we are adding the data from
+                // cursor to our array list.
+                cardioRecordsArrayList.add(new CardioRecord(
+                        cardioRecords.getInt(0),"cardio",
+                        cardioRecords.getString(1),
+                        cardioRecords.getFloat(2)));
+            } while (cardioRecords.moveToNext());
+            // moving our cursor to next.
+        }
+        cardioRecords.close();
+        return cardioRecordsArrayList;
+
 
     }
 

@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // test
-
-
     }
 
     public void newWeightsWorkout(View view){
@@ -28,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void newCardioWorkout(View view){
         Intent myIntent = new Intent(this, CardioInput.class);
+
+        startActivity(myIntent);
+    }
+
+    public void newStatistics(View view){
+        Intent myIntent = new Intent(this, Statistics.class);
 
         startActivity(myIntent);
     }
