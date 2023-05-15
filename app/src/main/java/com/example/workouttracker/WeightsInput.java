@@ -20,7 +20,7 @@ import java.util.Date;
 
 public class WeightsInput extends AppCompatActivity {
 
-    TextView dateDisplay;
+    TextView dateDisplay, saveStatus;
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date, workout_date;
@@ -87,10 +87,7 @@ public class WeightsInput extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void insertRecord(){
-//        int index = weightsWorkout.size();
-//        weightsWorkout.add
-//    }
+
 
     public void addExercise(View view){
 
@@ -102,19 +99,6 @@ public class WeightsInput extends AppCompatActivity {
 //        wAdapter.notifyDataSetChanged();
         wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
 
-    }
-
-    public void newRow(View view){
-       int last_index =  wAdapter.mWeightsWorkout.size() - 1;
-       // if last row in table not empty, add new row
-       if (!wAdapter.mWeightsWorkout.get(last_index).getExercise().equals("")){
-           // add new empty record
-           //weightsWorkout.add(new WeightsRecord());
-           wAdapter.mWeightsWorkout.add(new WeightsRecord());
-           // notify the adapter to show on screen
-//        wAdapter.notifyDataSetChanged();
-           wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
-       }
     }
 
     public void saveWeightsWorkout(View view){
@@ -156,6 +140,10 @@ public class WeightsInput extends AppCompatActivity {
             dbHandler.addRelationWorkoutExerciseWeights(workout_id, new_exercise_id, new_weights_id);
 
         }
+
+        saveStatus = (TextView) findViewById(R.id.save_status);
+        saveStatus.setText(R.string.saved_status_text);
+        saveStatus.setTextColor(getColor(R.color.purple_700));
 
     }
 }

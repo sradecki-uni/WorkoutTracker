@@ -11,6 +11,8 @@
     <string name="save_text">Save</string>
     <string name="time_text">Time</string>
     <string name="Distance_text">Distance (km)</string>
+    <string name="not_saved_status_text">WORKOUT NOT SAVED</string>
+    <string name="saved_status_text">WORKOUT SAVED</string>
     <string-array name="type_options">
         <item>Abs</item>
         <item>Arms</item>

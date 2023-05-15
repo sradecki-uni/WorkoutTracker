@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +27,9 @@ public class WeightsAdapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // member variable for any view that will be set as row are rendered
-        public EditText exerciseView, typeView, setsView, repsView, weightView;
+        public EditText exerciseView, setsView, repsView, weightView;
         public Spinner typeSpinner;
+
 
 
 
@@ -39,12 +41,12 @@ public class WeightsAdapter extends
             super(itemView);
 
             exerciseView = (EditText) itemView.findViewById(R.id.w_exercise_input);
-            //typeView = (EditText) itemView.findViewById(R.id.w_type_input);
             typeSpinner = (Spinner) itemView.findViewById(R.id.spinner_type);
             setsView = (EditText) itemView.findViewById(R.id.w_sets_input);
             repsView = (EditText) itemView.findViewById(R.id.w_reps_input);
             weightView = (EditText) itemView.findViewById(R.id.w_weight_input);
 
+            // set adapter for the dropdown menus
             adapter = ArrayAdapter.createFromResource(typeSpinner.getContext(), R.array.type_options, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             typeSpinner.setAdapter(adapter);
@@ -69,23 +71,7 @@ public class WeightsAdapter extends
                 }
             });
 
-//            typeView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    mWeightsWorkout.get(getAdapterPosition()).
-//                            setmType(typeView.getText().toString());
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
+
             typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                 @Override

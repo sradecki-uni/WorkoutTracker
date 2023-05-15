@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CardioInput extends AppCompatActivity {
-    TextView dateDisplay;
+    TextView dateDisplay, saveStatus;;
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date, workout_date;
@@ -139,6 +139,10 @@ public class CardioInput extends AppCompatActivity {
             dbHandler.addRelationWorkoutExerciseCardio(workout_id, new_exercise_id, new_cardio_id);
 
         }
+
+        saveStatus = (TextView) findViewById(R.id.save_status_c);
+        saveStatus.setText(R.string.saved_status_text);
+        saveStatus.setTextColor(getColor(R.color.purple_700));
 
     }
 }
