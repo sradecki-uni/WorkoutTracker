@@ -134,6 +134,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db_write.insert(TABLE_TYPE, null, values);
         values.put(COLUMN_NAME, "Cardio");
         db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Back");
+        db_write.insert(TABLE_TYPE, null, values);
         db_write.close();
     }
     public void addWeights( WeightsRecord wr){

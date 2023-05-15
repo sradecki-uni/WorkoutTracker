@@ -73,6 +73,8 @@ public class WeightsInput extends AppCompatActivity {
 
 
 
+
+
     }
     // code for back button
     @Override
@@ -100,6 +102,19 @@ public class WeightsInput extends AppCompatActivity {
 //        wAdapter.notifyDataSetChanged();
         wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
 
+    }
+
+    public void newRow(View view){
+       int last_index =  wAdapter.mWeightsWorkout.size() - 1;
+       // if last row in table not empty, add new row
+       if (!wAdapter.mWeightsWorkout.get(last_index).getExercise().equals("")){
+           // add new empty record
+           //weightsWorkout.add(new WeightsRecord());
+           wAdapter.mWeightsWorkout.add(new WeightsRecord());
+           // notify the adapter to show on screen
+//        wAdapter.notifyDataSetChanged();
+           wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
+       }
     }
 
     public void saveWeightsWorkout(View view){

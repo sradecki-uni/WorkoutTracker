@@ -4,15 +4,16 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
+
     <LinearLayout
         android:id="@+id/homebuttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="395dp"
+        android:layout_height="115dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="40dp">
+        android:paddingTop="40dp"
+        android:paddingRight="16dp">
 
         <Button
             android:id="@+id/button"
@@ -25,16 +26,16 @@
             android:id="@+id/button2"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:onClick="newCardioWorkout"
-            android:text="Cardio Workout"
-            android:layout_margin="10dp"/>
+            android:text="Cardio Workout" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:text="Workout Statistics"
-            android:onClick="newStatistics"/>
+            android:onClick="newStatistics"
+            android:text="Workout Statistics" />
     </LinearLayout>
     <TableLayout
         android:id = "@+id/topworkouts"

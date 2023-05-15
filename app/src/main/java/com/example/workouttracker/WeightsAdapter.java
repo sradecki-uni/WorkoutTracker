@@ -7,7 +7,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,10 +22,13 @@ public class WeightsAdapter extends
         RecyclerView.Adapter<WeightsAdapter.ViewHolder> {
 
     public ArrayList<WeightsRecord> mWeightsWorkout;
+    public ArrayAdapter<CharSequence>adapter;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // member variable for any view that will be set as row are rendered
         public EditText exerciseView, typeView, setsView, repsView, weightView;
+        public Spinner typeSpinner;
+
 
 
         // constructor that accepts the entire item row
@@ -33,10 +39,15 @@ public class WeightsAdapter extends
             super(itemView);
 
             exerciseView = (EditText) itemView.findViewById(R.id.w_exercise_input);
-            typeView = (EditText) itemView.findViewById(R.id.w_type_input);
+            //typeView = (EditText) itemView.findViewById(R.id.w_type_input);
+            typeSpinner = (Spinner) itemView.findViewById(R.id.spinner_type);
             setsView = (EditText) itemView.findViewById(R.id.w_sets_input);
             repsView = (EditText) itemView.findViewById(R.id.w_reps_input);
             weightView = (EditText) itemView.findViewById(R.id.w_weight_input);
+
+            adapter = ArrayAdapter.createFromResource(typeSpinner.getContext(), R.array.type_options, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            typeSpinner.setAdapter(adapter);
 
             // use text changed listener to get text from edit text cells
 
@@ -58,20 +69,39 @@ public class WeightsAdapter extends
                 }
             });
 
-            typeView.addTextChangedListener(new TextWatcher() {
+//            typeView.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    mWeightsWorkout.get(getAdapterPosition()).
+//                            setmType(typeView.getText().toString());
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//
+//                }
+//            });
+            typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void onItemSelected(AdapterView<?> adapterView, View view,
+                                           int position, long id) {
+                    Object item = adapterView.getItemAtPosition(position);
+                    if (item != null) {
+                        mWeightsWorkout.get(getAdapterPosition()).setmType(typeSpinner.getSelectedItem().toString());
+                    }
+
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mWeightsWorkout.get(getAdapterPosition()).
-                            setmType(typeView.getText().toString());
-                }
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                @Override
-                public void afterTextChanged(Editable s) {
 
                 }
             });
@@ -97,7 +127,8 @@ public class WeightsAdapter extends
                                 setmSets(Integer.parseInt(setsView.getText().toString()));
 
                     }
-                }});
+                }
+            });
 
             repsView.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -107,7 +138,7 @@ public class WeightsAdapter extends
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                   }
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
@@ -144,10 +175,6 @@ public class WeightsAdapter extends
                 }
             });
 
-
-
-
-
         }
     }
 
@@ -182,8 +209,9 @@ public class WeightsAdapter extends
         // Set item views based on your views and data model
         EditText exerciseEditView = holder.exerciseView;
         exerciseEditView.setText(weightsRecord.getExercise());
-        EditText typeEditView = holder.typeView;
-        typeEditView.setText(weightsRecord.getType());
+//        EditText typeEditView = holder.typeView;
+//        typeEditView.setText(weightsRecord.getType());
+        Spinner typeSpinnerView = holder.typeSpinner;
         EditText setsEditView = holder.setsView;
         setsEditView.setText(Integer.toString(weightsRecord.getSets()));
         EditText repsEditView = holder.repsView;
