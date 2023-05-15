@@ -447,25 +447,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public ArrayList<CardioRecord> getLongestCardioSessions(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cardioRecords
-                = db.rawQuery("SELECT * FROM " + TABLE_CARDIO, null);
-        ArrayList<CardioRecord> cardioRecordsArrayList
-                = new ArrayList<>();
+        Cursor cardioRecords = db.rawQuery("SELECT * FROM " + TABLE_CARDIO + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
+        ArrayList<CardioRecord> cardioRecordsArrayList = new ArrayList<>();
         if (cardioRecords.moveToFirst()) {
             do {
-                // on below line we are adding the data from
-                // cursor to our array list.
                 cardioRecordsArrayList.add(new CardioRecord(
-                        cardioRecords.getInt(0),"cardio",
+                        cardioRecords.getInt(0),
+                        "cardio",
                         cardioRecords.getString(1),
                         cardioRecords.getFloat(2)));
             } while (cardioRecords.moveToNext());
-            // moving our cursor to next.
         }
         cardioRecords.close();
         return cardioRecordsArrayList;
-
-
     }
+
 
 }

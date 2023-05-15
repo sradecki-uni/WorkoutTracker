@@ -34,7 +34,7 @@ public class Statistics extends AppCompatActivity{
         // on create, create predefined type table
         cardioModalArrayList = new ArrayList<>();
         cardioModalArrayList = dbHandler.getLongestCardioSessions();
-        // recieve intent from previous activity
+        // receive intent from previous activity
         Intent receiving = getIntent();
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -47,7 +47,7 @@ public class Statistics extends AppCompatActivity{
         dateDisplay.setText(date);
         cardioAdapter = new StatsCardioAdapter(cardioModalArrayList, this);
         cardioRV = (RecyclerView) findViewById(R.id.idRVCardio);
-        cardioRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        cardioRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         // setting our adapter to recycler view.
         cardioRV.setAdapter(cardioAdapter);
 
