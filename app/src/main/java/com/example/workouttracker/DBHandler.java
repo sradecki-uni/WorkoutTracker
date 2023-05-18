@@ -399,8 +399,27 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // might need to adjust this to qurey the r_workout_exercise table
+    public WorkoutTypeRecord findWorkoutType(String type){
+        String query = "SELECT * FROM " + TABLE_WORKOUTTYPE + " WHERE " + COLUMN_NAME + " = \"" + type + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        WorkoutTypeRecord record = new WorkoutTypeRecord();
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            record.setTypeId(cursor.getInt(0));
+            record.setName(cursor.getString(1));
+        }
+        else{
+            record = null;
+        }
+        db.close();
+        return record;
+    }
+
     public WeightsRecord findWeightsExercise(String exercise){
-        String query = "SELECT * FROM" + TABLE_WORKOUT + "WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
+        String query = "SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -408,49 +427,172 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            wr.setId(cursor.getInt(0));
-            wr.setmExercise(cursor.getString(1));
-            wr.setmType(cursor.getString(2));
-            wr.setmSets(Integer.parseInt(cursor.getString(3)));
-            wr.setmReps(Integer.parseInt(cursor.getString(4)));
-            wr.setmWeight(Integer.parseInt(cursor.getString(5)));
-
-
+            wr.setWeightId(cursor.getInt(0));
+            wr.setSets(cursor.getInt(1));
+            wr.setReps(cursor.getInt(2));
+            wr.setWeight(cursor.getFloat(3));
+            wr.setTypeId(cursor.getInt(4));
         }
         else{
             wr = null;
         }
         db.close();
         return wr;
-
     }
 
+    public CardioRecord findCardioExercise(String exercise){
+        String query = "SELECT * FROM " + TABLE_CARDIO + " WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CardioRecord cr = new CardioRecord();
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            cr.setCardioId(cursor.getInt(0));
+            cr.setTime(cursor.getInt(1));
+            cr.setDistance(cursor.getInt(2));
+        }
+        else{
+            cr = null;
+        }
+        db.close();
+        return cr;
+    }
+
+    public GlobalWorkoutTableRecord findGlobalTable(int id){
+        String query = "SELECT * FROM " + TABLE_GLOBALTABLE + " WHERE " + COLUMN_ID + " = \"" + id + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        GlobalWorkoutTableRecord record = new GlobalWorkoutTableRecord();
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            record.setId(cursor.getInt(0));
+            record.setExerciseId(cursor.getInt(1));
+            record.setWorkoutType(cursor.getString(2));
+            record.setDate(cursor.getString(3));
+        }
+        else{
+            record = null;
+        }
+        db.close();
+        return record;
+    }
+
+
     // might need to adjust this to query the r_workout_exercise table
-    public boolean deleteWeightsRecord(String mWeight){
+    public boolean deleteWorkoutTypeRecord(String typeName){
         boolean result = false;
 
-        String query = "Select * From " + TABLE_WORKOUT + "WHERE " + COLUMN_NAME + " = \"" + mWeight + "\"";
+        String query = "SELECT * FROM " + TABLE_WORKOUTTYPE + " WHERE " + COLUMN_NAME + " = \"" + typeName + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        WeightsRecord wr = new WeightsRecord();
-
         if(cursor.moveToFirst()){
-            wr.setId(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_WORKOUT,  COLUMN_NAME + " = ?",
-                    new String [] {String.valueOf(wr.getId())});
+            int id = Integer.parseInt(cursor.getString(0));
+            db.delete(TABLE_WORKOUTTYPE, COLUMN_ID + " = ?",
+                    new String [] {String.valueOf(id)});
             cursor.close();
             result = true;
-
         }
         db.close();
         return result;
-
     }
 
-    public ArrayList<CardioRecord> getLongestCardioSessions(){
+    public boolean deleteWeightsRecord(String exerciseName){
+        boolean result = false;
+
+        String query = "SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + COLUMN_NAME + " = \"" + exerciseName + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            int id = Integer.parseInt(cursor.getString(0));
+            db.delete(TABLE_WEIGHTS, COLUMN_ID + " = ?",
+                    new String [] {String.valueOf(id)});
+            cursor.close();
+            result = true;
+        }
+        db.close();
+        return result;
+    }
+
+    public boolean deleteCardioRecord(String exerciseName){
+        boolean result = false;
+
+        String query = "SELECT * FROM " + TABLE_CARDIO + " WHERE " + COLUMN_NAME + " = \"" + exerciseName + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            int id = Integer.parseInt(cursor.getString(0));
+            db.delete(TABLE_CARDIO, COLUMN_ID + " = ?",
+                    new String [] {String.valueOf(id)});
+            cursor.close();
+            result = true;
+        }
+        db.close();
+        return result;
+    }
+
+    public boolean deleteGlobalTableRecord(int id){
+        boolean result = false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int deletionCount = db.delete(TABLE_GLOBALTABLE, COLUMN_ID + " = ?",
+                new String [] {String.valueOf(id)});
+
+        if(deletionCount > 0){
+            result = true;
+        }
+
+        db.close();
+        return result;
+    }
+
+
+    public ArrayList<WorkoutTypeRecord> getLongestWorkoutTypes() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor workoutTypesRecords = db.rawQuery("SELECT * FROM " + TABLE_WORKOUTTYPE + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
+        ArrayList<WorkoutTypeRecord> workoutTypeRecordsArrayList = new ArrayList<>();
+        if (workoutTypesRecords.moveToFirst()) {
+            do {
+                workoutTypeRecordsArrayList.add(new WorkoutTypeRecord(
+                        workoutTypesRecords.getInt(0),
+                        workoutTypesRecords.getString(1),
+                        workoutTypesRecords.getFloat(2)));
+            } while (workoutTypesRecords.moveToNext());
+        }
+        workoutTypesRecords.close();
+        return workoutTypeRecordsArrayList;
+    }
+
+    public ArrayList<WeightsRecord> getHeaviestWeightsSessions() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor weightsRecords = db.rawQuery("SELECT * FROM " + TABLE_WEIGHTS + " ORDER BY " + COLUMN_WEIGHT + " DESC LIMIT 3", null);
+        ArrayList<WeightsRecord> weightsRecordsArrayList = new ArrayList<>();
+        if (weightsRecords.moveToFirst()) {
+            do {
+                weightsRecordsArrayList.add(new WeightsRecord(
+                        weightsRecords.getInt(0),
+                        weightsRecords.getString(1),
+                        weightsRecords.getFloat(2)));
+            } while (weightsRecords.moveToNext());
+        }
+        weightsRecords.close();
+        return weightsRecordsArrayList;
+    }
+
+    public ArrayList<CardioRecord> getLongestCardioSessions() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cardioRecords = db.rawQuery("SELECT * FROM " + TABLE_CARDIO + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
         ArrayList<CardioRecord> cardioRecordsArrayList = new ArrayList<>();
@@ -458,7 +600,6 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 cardioRecordsArrayList.add(new CardioRecord(
                         cardioRecords.getInt(0),
-                        "cardio",
                         cardioRecords.getString(1),
                         cardioRecords.getFloat(2)));
             } while (cardioRecords.moveToNext());
@@ -466,6 +607,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cardioRecords.close();
         return cardioRecordsArrayList;
     }
+
 
 
 }
