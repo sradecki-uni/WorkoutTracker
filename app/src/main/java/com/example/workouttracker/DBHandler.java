@@ -97,9 +97,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "date DATE NOT NULL, " +
                 "exercise_id INT, " +
-                "workout_type ENUM('cardio', 'weights') NOT NULL, " +
+                "workout_type TEXT NOT NULL CHECK(workout_type IN ('cardio', 'weights')), " +
                 "FOREIGN KEY(exercise_id) REFERENCES " + TABLE_WEIGHTS + "(weight_id), " +
                 "FOREIGN KEY(exercise_id) REFERENCES " + TABLE_CARDIOWORKOUT + "(cardio_id));";
+
 
         db.execSQL(CREATE_WORKOUTTYPE_TABLE);
         db.execSQL(CREATE_WEIGHTS_TABLE);
@@ -263,7 +264,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int id;
         try {
             String query = "SELECT " + COLUMN_CARDIO_ID + " FROM " + TABLE_CARDIOWORKOUT + " WHERE "
-                    + COLUMN_TIME + " = "  + cr.getTime() + " AND " + COLUMN_DISTANCE + " = " + cr.getDistance();
+                    + COLUMN_TIME + " = "  + cr.getmTime() + " AND " + COLUMN_DISTANCE + " = " + cr.getmDistance();
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
@@ -405,19 +406,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        WorkoutTypeRecord record = new WorkoutTypeRecord();
+        WorkoutTypeRecord record;
 
         if(cursor.moveToFirst()){
-            cursor.moveToFirst();
-            record.setTypeId(cursor.getInt(0));
-            record.setName(cursor.getString(1));
-        }
-        else{
+            int typeId = cursor.getInt(0);
+            String name = cursor.getString(1);
+            float intensity = cursor.getFloat(2);  // assuming the third field is intensity
+            record = new WorkoutTypeRecord(typeId, name, intensity);
+        } else{
             record = null;
         }
         db.close();
         return record;
     }
+
 
     public WeightsRecord findWeightsExercise(String exercise){
         String query = "SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
@@ -428,10 +430,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            wr.setWeightId(cursor.getInt(0));
-            wr.setSets(cursor.getInt(1));
-            wr.setReps(cursor.getInt(2));
-            wr.setWeight(cursor.getFloat(3));
+            wr.setmWeight(cursor.getInt(0));
+            wr.setmSets(cursor.getInt(1));
+            wr.setmReps(cursor.getInt(2));
+            wr.setmWeight(cursor.getFloat(3));
             wr.setTypeId(cursor.getInt(4));
         }
         else{
@@ -450,9 +452,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            cr.setCardioId(cursor.getInt(0));
-            cr.setTime(cursor.getInt(1));
-            cr.setDistance(cursor.getInt(2));
+            cr.setId(cursor.getInt(0));
+            cr.setmTime(String.valueOf(cursor.getInt(1)));
+            cr.setmDistance(cursor.getInt(2));
         }
         else{
             cr = null;
@@ -590,15 +592,13 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<WeightsRecord> weightsRecordsArrayList = new ArrayList<>();
         if (weightsRecords.moveToFirst()) {
             do {
-                weightsRecordsArrayList.add(new WeightsRecord(
-                        weightsRecords.getInt(0),
-                        weightsRecords.getString(1),
-                        weightsRecords.getFloat(2)));
+                weightsRecordsArrayList.add(new WeightsRecord(weightsRecords.getInt(0), weightsRecords.getString(1), "defaultType", weightsRecords.getFloat(2)));
             } while (weightsRecords.moveToNext());
         }
         weightsRecords.close();
         return weightsRecordsArrayList;
     }
+
 
     public ArrayList<CardioRecord> getLongestCardioSessions() {
         SQLiteDatabase db = this.getReadableDatabase();

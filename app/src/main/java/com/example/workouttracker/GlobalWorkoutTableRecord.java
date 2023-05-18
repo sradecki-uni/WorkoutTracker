@@ -13,6 +13,9 @@ public class GlobalWorkoutTableRecord {
     private Date date;
     private int globalTableId;
 
+    public GlobalWorkoutTableRecord(){
+
+    }
     public GlobalWorkoutTableRecord(int id, int workoutTypeId, int weightsId, int weightNameId, int cardioId, int cardioWorkoutId, Date date, int globalTableId, int exerciseTypeId) {
         this.id = id;
         this.workoutTypeId = workoutTypeId;

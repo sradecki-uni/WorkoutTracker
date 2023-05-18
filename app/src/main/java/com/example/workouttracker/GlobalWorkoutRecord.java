@@ -8,6 +8,9 @@ public class GlobalWorkoutRecord {
     private String workoutType;
     private Date date;
 
+    public GlobalWorkoutRecord(){
+
+    }
     public GlobalWorkoutRecord(int id, int exerciseId, String workoutType, Date date) {
         this.id = id;
         this.exerciseId = exerciseId;
