@@ -34,4 +34,13 @@ public class WorkoutTypeRecord {
     public void setTime(float time) {
         this.time = time;
     }
+
+    // method for setting type id, assuming type id is synonymous with id for this class
+    public void setTypeId(int id) {
+        this.id = id;
+    }
+
+    public int getType(){
+        return id;
+    }
 }

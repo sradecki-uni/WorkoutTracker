@@ -48,6 +48,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_DISTANCE = "distance";
 
+    public static final String COLUMN_WORKOUT_ID = "workout_id";
 // e_cardio_names
 // The column name "cardio_id" already defined above for e_cardio table
 // The column name "name" already defined above for e_weights_names table
@@ -296,7 +297,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_GLOBALTABLE + " WHERE "
-                    + COLUMN_EXERCISE_ID + " = "  + gr.getExerciseID() + " AND " + COLUMN_DATE + " = '" + gr.getDate() + "'";
+                    + COLUMN_EXERCISE_ID + " = "  + gr.getExerciseTypeId() + " AND " + COLUMN_DATE + " = '" + gr.getDate() + "'";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
@@ -461,7 +462,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public GlobalWorkoutTableRecord findGlobalTable(int id){
-        String query = "SELECT * FROM " + TABLE_GLOBALTABLE + " WHERE " + COLUMN_ID + " = \"" + id + "\"";
+        String query = "SELECT * FROM " + TABLE_GLOBALTABLE + " WHERE " + COLUMN_ID + " = " + id;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -470,9 +471,15 @@ public class DBHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
             record.setId(cursor.getInt(0));
-            record.setExerciseId(cursor.getInt(1));
-            record.setWorkoutType(cursor.getString(2));
-            record.setDate(cursor.getString(3));
+            // assuming that column index corresponds to the order in class
+            record.setWorkoutTypeId(cursor.getInt(1));
+            record.setWeightsId(cursor.getInt(2));
+            record.setWeightNameId(cursor.getInt(3));
+            record.setCardioId(cursor.getInt(4));
+            record.setCardioWorkoutId(cursor.getInt(5));
+            record.setDate(new Date(cursor.getLong(6))); // assuming date is stored as long in SQLite
+            record.setGlobalTableId(cursor.getInt(7));
+            record.setExerciseTypeId(cursor.getInt(8));
         }
         else{
             record = null;
@@ -480,6 +487,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return record;
     }
+
 
 
     // might need to adjust this to query the r_workout_exercise table
