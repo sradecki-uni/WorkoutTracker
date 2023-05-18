@@ -241,7 +241,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public int getWeightID(WeightsNamesRecord wr){
+    public int getWeightID(WeightsNameRecord wr){
         int id;
         try {
             String query = "SELECT " + COLUMN_WEIGHT_ID + " FROM " + TABLE_WEIGHTNAMES + " WHERE "
@@ -292,7 +292,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public int getGlobalTableID(GlobalTableRecord gr){
+    public int getGlobalTableID(GlobalWorkoutTableRecord gr){
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_GLOBALTABLE + " WHERE "
