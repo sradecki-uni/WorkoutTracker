@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.*;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
@@ -461,6 +462,129 @@ public class DBHandler extends SQLiteOpenHelper {
         cardioRecords.close();
         return cardioRecordsArrayList;
     }
+
+    public ArrayList<WorkoutRecord> getAllPreviousWorkouts(){
+        ArrayList<WorkoutRecord> allWorkouts = new ArrayList<WorkoutRecord>();
+        WorkoutRecord currentWorkoutRecord;
+        int lastWorkoutID = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // returns format: workoutID | date | Exercise name | Time | Distance | type
+        String cardioQuery = "SELECT " +
+                TABLE_WORKOUT + "." + COLUMN_ID + ", " +
+                TABLE_WORKOUT + "." + COLUMN_DATE + ", " +
+                TABLE_EXERCISE + "." + COLUMN_NAME + ", " +
+                TABLE_CARDIO + "." + COLUMN_TIME + ", " +
+                TABLE_CARDIO + "." + COLUMN_DISTANCE + ", " +
+                TABLE_TYPE + "." + COLUMN_NAME +
+                " FROM " + TABLE_WORKOUT +
+                " JOIN " + TABLE_WORKOUT_EXERCISE + " ON " +
+                TABLE_WORKOUT + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_WORKOUTID +
+                " JOIN " + TABLE_EXERCISE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_EXERCISE_TYPE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_TYPE + " ON " +
+                TABLE_TYPE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_TYPEID +
+                " JOIN " + TABLE_CARDIO + " ON " +
+                TABLE_CARDIO + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_CARDIOID;
+
+        // returns format: workoutID | date | Exercise name | sets | reps | weight | type
+        String weightsQuery = "SELECT " +
+                TABLE_WORKOUT + "." + COLUMN_ID + ", " +
+                TABLE_WORKOUT + "." + COLUMN_DATE + ", " +
+                TABLE_EXERCISE + "." + COLUMN_NAME + ", " +
+                TABLE_WEIGHTS + "." + COLUMN_SETS + ", " +
+                TABLE_WEIGHTS + "." + COLUMN_REPS + ", " +
+                TABLE_WEIGHTS + "." + COLUMN_WEIGHT + ", " +
+                TABLE_TYPE + "." + COLUMN_NAME +
+                " FROM " + TABLE_WORKOUT +
+                " JOIN " + TABLE_WORKOUT_EXERCISE + " ON " +
+                TABLE_WORKOUT + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_WORKOUTID +
+                " JOIN " + TABLE_EXERCISE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_EXERCISE_TYPE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_TYPE + " ON " +
+                TABLE_TYPE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_TYPEID +
+                " JOIN " + TABLE_WEIGHTS + " ON " +
+                TABLE_WEIGHTS + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_WEIGHTSID;
+
+        // get any cardio records
+        Cursor workoutRecords_cardio_cursor = db.rawQuery(cardioQuery, null);
+        if(workoutRecords_cardio_cursor.moveToFirst()){
+            do {
+
+
+                // if current workout record id different from the last, add new workout record
+                if ( lastWorkoutID != workoutRecords_cardio_cursor.getInt(0)){
+                    allWorkouts.add(new WorkoutRecord());
+                }
+                // get the current workout record
+                currentWorkoutRecord = allWorkouts.get(allWorkouts.size()-1);
+                currentWorkoutRecord.setmId(workoutRecords_cardio_cursor.getInt(0));
+                currentWorkoutRecord.setmDate(workoutRecords_cardio_cursor.getString(1));
+                currentWorkoutRecord.addCardioRecord(
+                        // set id for cardio record to 0,
+                        // as it doesnt necessarily matter when getting records from database
+                        0,
+                        // get name
+                        workoutRecords_cardio_cursor.getString(2),
+                        // get time
+                        workoutRecords_cardio_cursor.getString(3),
+                        // get distance
+                        workoutRecords_cardio_cursor.getFloat(4)
+                );
+                // get id of current workout workout for next record
+                lastWorkoutID = workoutRecords_cardio_cursor.getInt(0);
+            }
+            while (workoutRecords_cardio_cursor.moveToNext());
+        }
+
+        // get any weights records
+        Cursor workoutRecords_weights_cursor = db.rawQuery(weightsQuery, null);
+        // reset last workout id
+        lastWorkoutID = 0;
+        if(workoutRecords_weights_cursor.moveToFirst()){
+            do {
+
+                // if current workout record id different from the last, add new workout record
+                if ( lastWorkoutID != workoutRecords_weights_cursor.getInt(0)){
+                    allWorkouts.add(new WorkoutRecord());
+                }
+                // get the current workout record
+                currentWorkoutRecord = allWorkouts.get(allWorkouts.size()-1);
+                currentWorkoutRecord.setmId(workoutRecords_weights_cursor.getInt(0));
+                currentWorkoutRecord.setmDate(workoutRecords_weights_cursor.getString(1));
+                currentWorkoutRecord.addWeightsRecord(
+                        // set id for weigts record to 0
+                        0,
+                        // get name
+                        workoutRecords_weights_cursor.getString(2),
+                        // get type
+                        workoutRecords_weights_cursor.getString(6),
+                        // get sets
+                        workoutRecords_weights_cursor.getInt(3),
+                        // get reps
+                        workoutRecords_weights_cursor.getInt(4),
+                        // get weight
+                        workoutRecords_weights_cursor.getFloat(5)
+                );
+                // get id of last workout
+                lastWorkoutID = workoutRecords_weights_cursor.getInt(0);
+            }
+            while (workoutRecords_weights_cursor.moveToNext());
+        }
+
+        // code sourced from https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/
+        // sort all workouts by ID/date (Newest ID = newest date),
+        // with the newest first (i.e. reverse order of IDs)
+        allWorkouts.sort(Comparator.comparing(WorkoutRecord::getmId).reversed());
+
+        return allWorkouts;
+    }
+
+
 
 
 }
