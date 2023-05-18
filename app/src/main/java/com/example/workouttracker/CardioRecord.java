@@ -1,20 +1,16 @@
 package com.example.workouttracker;
 
-import java.util.ArrayList;
-
 public class CardioRecord {
-    public String mExercise, mTime, mType;
+    public static final String mType = "Cardio";
+    public String mExercise, mTime;
     public int mId;
     public float mDistance;
-    // initialise empty array list
-
 
     public CardioRecord(){
         mId = 0;
         mExercise = "";
         mTime = "";
         mDistance = 0.0F;
-        mType = "Cardio";
     }
 
     public CardioRecord(int id, String exercise, String time, Float distance) {
@@ -22,7 +18,6 @@ public class CardioRecord {
         mExercise = exercise;
         mTime = time;
         mDistance = distance;
-        mType = "Cardio";
     }
 
     public CardioRecord(int id, String exercise, Float distance) {
@@ -30,7 +25,6 @@ public class CardioRecord {
         mExercise = exercise;
         mTime = "";
         mDistance = distance;
-        mType = "Cardio";
     }
 
     public CardioRecord(int id, String exercise, String time) {
@@ -38,7 +32,6 @@ public class CardioRecord {
         mExercise = exercise;
         mTime = time;
         mDistance = 0.0F;
-        mType = "Cardio";
     }
 
     public String getExercise() {
@@ -70,9 +63,5 @@ public class CardioRecord {
 
     public void setId(int Id) {
         this.mId = Id;
-    }
-
-    public String getmType(){
-        return mType;
     }
 }
