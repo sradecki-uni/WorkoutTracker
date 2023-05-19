@@ -53,15 +53,15 @@ public class WorkoutRecord {
     }
 
     public String getAllTypes(){
-       if(mCardioRecords.isEmpty()){
-           // return comma separated string of all unique weights types
-           return String.join(", ",
-                   mWeightsRecords.stream().map(WeightsRecord::getType).distinct().collect(Collectors.toList()));
-       }else if (mWeightsRecords.isEmpty()){
-           return "Cardio";
-       }
-       // if neither weights or cardio records exist return null
-       return null;
+        if(mCardioRecords.isEmpty()){
+            // return comma separated string of all unique weights types
+            return String.join(", ",
+                    mWeightsRecords.stream().map(WeightsRecord::getType).distinct().collect(Collectors.toList()));
+        }else if (mWeightsRecords.isEmpty()){
+            return "Cardio";
+        }
+        // if neither weights or cardio records exist return null
+        return null;
     }
 
     public ArrayList<WeightsRecord> getAllWeightsIDs(){
@@ -89,3 +89,4 @@ public class WorkoutRecord {
         return mDate;
     }
 }
+

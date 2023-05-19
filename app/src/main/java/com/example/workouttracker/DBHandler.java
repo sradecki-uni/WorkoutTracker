@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Date;
 
 import androidx.annotation.Nullable;
 // import
@@ -16,48 +15,45 @@ import androidx.annotation.Nullable;
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "workoutDB.db";
-    private static final String TABLE_WORKOUTTYPE = "WorkoutType";
-    private static final String TABLE_WEIGHTS = "Weights";
-    private static final String TABLE_WEIGHTNAMES = "WeightNames";
-    private static final String TABLE_CARDIO = "Cardio";
-    private static final String TABLE_CARDIOWORKOUT = "CardioWorkout";
-    private static final String TABLE_GLOBALTABLE = "GlobalTable";
+    private static final String TABLE_WORKOUT = "e_workout";
+    private static final String TABLE_TYPE = "e_type";
+    private static final String TABLE_EXERCISE = "e_exercise";
+    private static final String TABLE_WEIGHTS = "e_weights";
+    private static final String TABLE_CARDIO = "e_cardio";
 
+    private static final String TABLE_EXERCISE_TYPE = "r_exercise_type";
+
+    private static final String TABLE_WORKOUT_EXERCISE = "r_workout_exercise";
 
     // used for name field in e_type, e_exercise tables
-    // e_workout_type
-    public static final String COLUMN_TYPE_ID = "type_id";
-    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_NAME = "name";
 
-    // e_weights
-    public static final String COLUMN_WEIGHT_ID = "weight_id";
+    // e_weight record fields
     public static final String COLUMN_SETS = "sets";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
 
-    // e_weights_names
-// The column name "weight_id" already defined above for e_weights table
-    public static final String COLUMN_NAME = "name";
-
-    // e_global_workout_table
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_EXERCISE_ID = "exercise_id";
-    public static final String COLUMN_WORKOUT_TYPE = "workout_type";
-    public static final String COLUMN_DATE = "date";
-
-    // e_cardio
-    public static final String COLUMN_CARDIO_ID = "cardio_id";
+    // e_cardio record fields
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_DISTANCE = "distance";
 
-    public static final String COLUMN_WORKOUT_ID = "workout_id";
-// e_cardio_names
-// The column name "cardio_id" already defined above for e_cardio table
-// The column name "name" already defined above for e_weights_names table
 
-// The table "CardioWorkout" does not have any unique column names
-// that have not been defined above in the column name constants.
+    // used for id field in all entity tables
+    public static final String COLUMN_ID = "id";
 
+
+    // e_weight record fields
+    public static final String COLUMN_DATE = "date";
+
+    // r_exercise_type record fields
+    public static final String COLUMN_TYPEID = "typeID";
+    // used in r_workout_exercise too
+    public static final String COLUMN_EXERCISID = "exerciseID";
+
+    // other r_workout_exercise fields
+    public static final String COLUMN_WORKOUTID = "workoutID";
+    public static final String COLUMN_WEIGHTSID = "weightsID";
+    public static final String COLUMN_CARDIOID = "cardioID";
 
 
 
@@ -67,139 +63,159 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_WORKOUTTYPE_TABLE = "CREATE TABLE " + TABLE_WORKOUTTYPE + " (" +
-                "type_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "type TEXT NOT NULL UNIQUE);";
+        String CREATE_E_TYPE_TABLE = "CREATE TABLE e_type (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "name TEXT NOT NULL UNIQUE ON CONFLICT IGNORE);";
 
-        String CREATE_WEIGHTS_TABLE = "CREATE TABLE " + TABLE_WEIGHTS + " (" +
-                "weight_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "sets INT NOT NULL, " +
-                "reps INT NOT NULL, " +
-                "weight FLOAT NOT NULL, " +
-                "type_id INT, " +
-                "FOREIGN KEY(type_id) REFERENCES " + TABLE_WORKOUTTYPE + "(type_id));";
+        String CREATE_E_EXERCISE_TABLE = "CREATE TABLE e_exercise (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ON CONFLICT IGNORE, " +
+                "name TEXT NOT NULL UNIQUE ON CONFLICT IGNORE);";
 
-        String CREATE_WEIGHTNAMES_TABLE = "CREATE TABLE " + TABLE_WEIGHTNAMES + " (" +
-                "weight_id INT PRIMARY KEY, " +
-                "name TEXT NOT NULL, " +
-                "FOREIGN KEY(weight_id) REFERENCES " + TABLE_WEIGHTS + "(weight_id));";
+        String CREATE_E_WORKOUT_TABLE = "CREATE TABLE e_workout (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "date TEXT NOT NULL);";
 
-        String CREATE_CARDIO_TABLE = "CREATE TABLE " + TABLE_CARDIO + " (" +
-                "cardio_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL);";
+        String CREATE_E_WEIGHTS_TABLE = "CREATE TABLE e_weights (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "sets UNSIGNED INTEGER DEFAULT 0, " +
+                "reps UNSIGNED INTEGER DEFAULT 0, " +
+                "weight UNSIGNED FLOAT DEFAULT 0.0 );";
 
-        String CREATE_CARDIOWORKOUT_TABLE = "CREATE TABLE " + TABLE_CARDIOWORKOUT + " (" +
-                "cardio_id INT, " +
-                "time INT NOT NULL, " +
-                "distance FLOAT NOT NULL, " +
-                "PRIMARY KEY (cardio_id, time, distance), " +
-                "FOREIGN KEY (cardio_id) REFERENCES " + TABLE_CARDIO + "(cardio_id));";
+        String CREATE_E_CARDIO_TABLE = "CREATE TABLE e_cardio (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                "time string DEFAULT '00:00:00', " +
+                "distance UNSIGNED FLOAT DEFAULT 0.0 );";
 
-        String CREATE_GLOBALTABLE_TABLE = "CREATE TABLE " + TABLE_GLOBALTABLE + " (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "date DATE NOT NULL, " +
-                "exercise_id INT, " +
-                "workout_type TEXT NOT NULL CHECK(workout_type IN ('cardio', 'weights')), " +
-                "FOREIGN KEY(exercise_id) REFERENCES " + TABLE_WEIGHTS + "(weight_id), " +
-                "FOREIGN KEY(exercise_id) REFERENCES " + TABLE_CARDIOWORKOUT + "(cardio_id));";
+        String CREATE_R_EXERCISE_TYPE_TABLE = "CREATE TABLE r_exercise_type (" +
+                "exerciseID INTEGER UNIQUE ON CONFLICT IGNORE, " +
+                "typeID INTEGER);";
 
+        String CREATE_R_WORKOUT_EXERCISE_TABLE = "CREATE TABLE r_workout_exercise (" +
+                "workoutID INTEGER, " +
+                "exerciseID INTEGER, " +
+                "cardioID INTEGER, " +
+                "weightsID INTEGER);" ;
 
-        db.execSQL(CREATE_WORKOUTTYPE_TABLE);
-        db.execSQL(CREATE_WEIGHTS_TABLE);
-        db.execSQL(CREATE_WEIGHTNAMES_TABLE);
-        db.execSQL(CREATE_CARDIO_TABLE);
-        db.execSQL(CREATE_CARDIOWORKOUT_TABLE);
-        db.execSQL(CREATE_GLOBALTABLE_TABLE);
+        db.execSQL(CREATE_E_TYPE_TABLE);
+        db.execSQL(CREATE_E_EXERCISE_TABLE);
+        db.execSQL(CREATE_E_WEIGHTS_TABLE);
+        db.execSQL(CREATE_E_CARDIO_TABLE);
+        db.execSQL(CREATE_E_WORKOUT_TABLE);
+        db.execSQL(CREATE_R_EXERCISE_TYPE_TABLE);
+        db.execSQL(CREATE_R_WORKOUT_EXERCISE_TABLE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GLOBALTABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDIOWORKOUT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDIO);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEIGHTNAMES);
+        // might not need to recreate type table as it will be predefined
+        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEIGHTS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUTTYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXERCISE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDIO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUT);
+        // will probably need to do the same for relational tables
         onCreate(db);
 
     }
-//    public void createTypeTable(){
-//        SQLiteDatabase db_write = this.getWritableDatabase();
-//
-//        // create predefined types for type tables
-//        ContentValues values = new ContentValues();
-//        values.put(COLUMN_NAME, "Chest");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Arms");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Abs");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Shoulders");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Legs");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Cardio");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        values.put(COLUMN_NAME, "Back");
-//        db_write.insert(TABLE_TYPE, null, values);
-//        db_write.close();
-//    }
-    public void addWorkoutType(String type){
+    public void createTypeTable(){
+        SQLiteDatabase db_write = this.getWritableDatabase();
+
+        // create predefined types for type tables
         ContentValues values = new ContentValues();
-        values.put("type", type);
+        values.put(COLUMN_NAME, "Chest");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Arms");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Abs");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Shoulders");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Legs");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Cardio");
+        db_write.insert(TABLE_TYPE, null, values);
+        values.put(COLUMN_NAME, "Back");
+        db_write.insert(TABLE_TYPE, null, values);
+        db_write.close();
+    }
+    public void addWeights( WeightsRecord wr){
+        ContentValues values_weights = new ContentValues();
+        values_weights.put(COLUMN_REPS, wr.getReps());
+        values_weights.put(COLUMN_WEIGHT, wr.getWeight());
+        values_weights.put(COLUMN_SETS, wr.getSets());
+
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_WORKOUTTYPE, null, values);
+
+        db.insert(TABLE_WEIGHTS, null, values_weights);
         db.close();
     }
 
-    public void addWeightNames(int weight_id, String name){
-        ContentValues values = new ContentValues();
-        values.put("weight_id", weight_id);
-        values.put("name", name);
+    public void addCardio( CardioRecord cr){
+        ContentValues values_weights = new ContentValues();
+        values_weights.put(COLUMN_TIME, cr.getmTime());
+        values_weights.put(COLUMN_DISTANCE, cr.getmDistance());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_WEIGHTNAMES, null, values);
+
+        db.insert(TABLE_CARDIO, null, values_weights);
         db.close();
     }
 
-    public void addCardio(String name){
-        ContentValues values = new ContentValues();
-        values.put("name", name);
+    public void addExercise( WeightsRecord wr){
+        ContentValues values_exercise = new ContentValues();
+        values_exercise.put(COLUMN_NAME, wr.getExercise());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_CARDIO, null, values);
+        try {
+            db.insertOrThrow(TABLE_EXERCISE, null, values_exercise);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
         db.close();
     }
 
-    public void addCardioWorkout(int cardio_id, int time, float distance){
-        ContentValues values = new ContentValues();
-        values.put("cardio_id", cardio_id);
-        values.put("time", time);
-        values.put("distance", distance);
+    public void addExercise( CardioRecord cr){
+        ContentValues values_exercise = new ContentValues();
+        values_exercise.put(COLUMN_NAME, cr.getExercise());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_CARDIOWORKOUT, null, values);
+        try {
+            db.insertOrThrow(TABLE_EXERCISE, null, values_exercise);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
+
         db.close();
     }
 
-    public void addGlobalTableRecord(String date, int exercise_id, String workout_type){
+    public void addWorkout(String date){
         ContentValues values = new ContentValues();
-        values.put("date", date);
-        values.put("exercise_id", exercise_id);
-        values.put("workout_type", workout_type);
+        values.put(COLUMN_DATE, date);
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_GLOBALTABLE, null, values);
+
+        try {
+            db.insert(TABLE_WORKOUT, null, values);
+        } catch (SQLiteConstraintException e){
+            e.printStackTrace();
+        }
+
+
         db.close();
     }
 
-
-    public int getNewestWorkoutTypeID(){
+    public int getNewestEWorkoutID(){
         int id;
         try {
-            String query = "SELECT MAX(" + COLUMN_TYPE_ID + ") FROM " + TABLE_WORKOUTTYPE;
+//            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WORKOUT ;
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WORKOUT ;
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
@@ -207,224 +223,180 @@ public class DBHandler extends SQLiteOpenHelper {
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
 
         return id;
     }
 
-    public int getNewestWeightID(){
+    public int getNewestEWeightsID(){
         int id;
         try {
-            String query = "SELECT MAX(" + COLUMN_WEIGHT_ID + ") FROM " + TABLE_WEIGHTS;
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_WEIGHTS;
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-    public int getNewestCardioID(){
+    public int getNewestECardioID(){
         int id;
         try {
-            String query = "SELECT MAX(" + COLUMN_CARDIO_ID + ") FROM " + TABLE_CARDIO;
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT MAX(" + COLUMN_ID + ") FROM " + TABLE_CARDIO;
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-    public int getWeightID(WeightsNameRecord wr){
+    public int getExerciseID(WeightsRecord wr){
         int id;
         try {
-            String query = "SELECT " + COLUMN_WEIGHT_ID + " FROM " + TABLE_WEIGHTNAMES + " WHERE "
-                    + COLUMN_NAME + " = '"  + wr.getName() + "'";
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_EXERCISE + " WHERE "
+                    + COLUMN_NAME + " = '"  + wr.getExercise() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-    public int getCardioID(CardioRecord cr){
+    public int getExerciseID(CardioRecord cr){
         int id;
         try {
-            String query = "SELECT " + COLUMN_CARDIO_ID + " FROM " + TABLE_CARDIOWORKOUT + " WHERE "
-                    + COLUMN_TIME + " = "  + cr.getmTime() + " AND " + COLUMN_DISTANCE + " = " + cr.getmDistance();
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_EXERCISE + " WHERE "
+                    + COLUMN_NAME + " = '"  + cr.getExercise() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-    public int getWorkoutTypeID(WorkoutTypeRecord wr){
+    public int getTypeID(WeightsRecord wr){
         int id;
         try {
-            String query = "SELECT " + COLUMN_TYPE_ID + " FROM " + TABLE_WORKOUTTYPE + " WHERE "
-                    + COLUMN_TYPE + " = '"  + wr.getType() + "'";
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
+                    + COLUMN_NAME + " = '"  + wr.getType() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-    public int getGlobalTableID(GlobalWorkoutTableRecord gr){
+    public int getTypeID(CardioRecord cr){
         int id;
         try {
-            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_GLOBALTABLE + " WHERE "
-                    + COLUMN_EXERCISE_ID + " = "  + gr.getExerciseTypeId() + " AND " + COLUMN_DATE + " = '" + gr.getDate() + "'";
-            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
+                    + COLUMN_NAME + " = '"  + cr.getmType() + "'";
+            SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
             db.close();
         }
         catch (Exception e){
+            // if no entries are in the database
             id = 1;
         }
         return id;
     }
 
-
-    public void addWorkoutType(int typeId, String name){
+    public void addRelationExerciseType(int typeID, int exerciseID){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TYPE_ID, typeId);
-        values.put(COLUMN_NAME, name);
 
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EXERCISID, exerciseID);
+        values.put(COLUMN_TYPEID, typeID);
+
+        // Insert the new row, returning the primary key value of the new row
         try {
-            db.insertOrThrow(TABLE_WORKOUTTYPE,null,values);
+            db.insertOrThrow(TABLE_EXERCISE_TYPE,null,values);
         } catch (SQLiteConstraintException e){
             e.printStackTrace();
         }
 
+
+
         db.close();
     }
 
-    public void addWeights(int weightId, String name, int sets, int reps, int weight){
+    public void addRelationWorkoutExerciseWeights(int workoutID, int exerciseID, int weightsID){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_WEIGHT_ID, weightId);
-        values.put(COLUMN_NAME, name);
-        values.put(COLUMN_SETS, sets);
-        values.put(COLUMN_REPS, reps);
-        values.put(COLUMN_WEIGHT, weight);
+        values.put(COLUMN_EXERCISID, exerciseID);
+        values.put(COLUMN_WORKOUTID, workoutID);
+        values.put(COLUMN_WEIGHTSID, weightsID);
 
         try {
-            db.insertOrThrow(TABLE_WEIGHTS,null,values);
+            db.insertOrThrow(TABLE_WORKOUT_EXERCISE,null,values);
         } catch (SQLiteConstraintException e){
             e.printStackTrace();
         }
 
+
+
         db.close();
     }
 
-    public void addCardio(int cardioId, int time, int distance){
+    public void addRelationWorkoutExerciseCardio(int workoutID, int exerciseID, int cardioID){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_CARDIO_ID, cardioId);
-        values.put(COLUMN_TIME, time);
-        values.put(COLUMN_DISTANCE, distance);
+        values.put(COLUMN_EXERCISID, exerciseID);
+        values.put(COLUMN_WORKOUTID, workoutID);
+        values.put(COLUMN_CARDIOID, cardioID);
 
         try {
-            db.insertOrThrow(TABLE_CARDIO,null,values);
+            db.insertOrThrow(TABLE_WORKOUT_EXERCISE,null,values);
         } catch (SQLiteConstraintException e){
             e.printStackTrace();
         }
 
-        db.close();
-    }
 
-    public void addCardioWorkout(int workoutId, int cardioId, int typeId){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_WORKOUT_ID, workoutId);
-        values.put(COLUMN_CARDIO_ID, cardioId);
-        values.put(COLUMN_TYPE_ID, typeId);
-
-        try {
-            db.insertOrThrow(TABLE_CARDIOWORKOUT,null,values);
-        } catch (SQLiteConstraintException e){
-            e.printStackTrace();
-        }
 
         db.close();
     }
-
-    public void addGlobalTable(int id, String date, int exerciseId, int typeId){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, id);
-        values.put(COLUMN_DATE, date);
-        values.put(COLUMN_EXERCISE_ID, exerciseId);
-        values.put(COLUMN_TYPE_ID, typeId);
-
-        try {
-            db.insertOrThrow(TABLE_GLOBALTABLE,null,values);
-        } catch (SQLiteConstraintException e){
-            e.printStackTrace();
-        }
-
-        db.close();
-    }
-
 
     // might need to adjust this to qurey the r_workout_exercise table
-    public WorkoutTypeRecord findWorkoutType(String type){
-        String query = "SELECT * FROM " + TABLE_WORKOUTTYPE + " WHERE " + COLUMN_NAME + " = \"" + type + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        WorkoutTypeRecord record;
-
-        if(cursor.moveToFirst()){
-            int typeId = cursor.getInt(0);
-            String name = cursor.getString(1);
-            float intensity = cursor.getFloat(2);  // assuming the third field is intensity
-            record = new WorkoutTypeRecord(typeId, name, intensity);
-        } else{
-            record = null;
-        }
-        db.close();
-        return record;
-    }
-
-
     public WeightsRecord findWeightsExercise(String exercise){
-        String query = "SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
+        String query = "SELECT * FROM" + TABLE_WORKOUT + "WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -432,177 +404,49 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            wr.setmWeight(cursor.getInt(0));
-            wr.setmSets(cursor.getInt(1));
-            wr.setmReps(cursor.getInt(2));
-            wr.setmWeight(cursor.getFloat(3));
-            wr.setTypeId(cursor.getInt(4));
+            wr.setId(cursor.getInt(0));
+            wr.setmExercise(cursor.getString(1));
+            wr.setmType(cursor.getString(2));
+            wr.setmSets(Integer.parseInt(cursor.getString(3)));
+            wr.setmReps(Integer.parseInt(cursor.getString(4)));
+            wr.setmWeight(Integer.parseInt(cursor.getString(5)));
+
+
         }
         else{
             wr = null;
         }
         db.close();
         return wr;
+
     }
-
-    public CardioRecord findCardioExercise(String exercise){
-        String query = "SELECT * FROM " + TABLE_CARDIO + " WHERE " + COLUMN_NAME + " = \"" + exercise + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        CardioRecord cr = new CardioRecord();
-
-        if(cursor.moveToFirst()){
-            cursor.moveToFirst();
-            cr.setId(cursor.getInt(0));
-            cr.setmTime(String.valueOf(cursor.getInt(1)));
-            cr.setmDistance(cursor.getInt(2));
-        }
-        else{
-            cr = null;
-        }
-        db.close();
-        return cr;
-    }
-
-    public GlobalWorkoutTableRecord findGlobalTable(int id){
-        String query = "SELECT * FROM " + TABLE_GLOBALTABLE + " WHERE " + COLUMN_ID + " = " + id;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        GlobalWorkoutTableRecord record = new GlobalWorkoutTableRecord();
-
-        if(cursor.moveToFirst()){
-            cursor.moveToFirst();
-            record.setId(cursor.getInt(0));
-            // assuming that column index corresponds to the order in class
-            record.setWorkoutTypeId(cursor.getInt(1));
-            record.setWeightsId(cursor.getInt(2));
-            record.setWeightNameId(cursor.getInt(3));
-            record.setCardioId(cursor.getInt(4));
-            record.setCardioWorkoutId(cursor.getInt(5));
-            record.setDate(new Date(cursor.getLong(6))); // assuming date is stored as long in SQLite
-            record.setGlobalTableId(cursor.getInt(7));
-            record.setExerciseTypeId(cursor.getInt(8));
-        }
-        else{
-            record = null;
-        }
-        db.close();
-        return record;
-    }
-
-
 
     // might need to adjust this to query the r_workout_exercise table
-    public boolean deleteWorkoutTypeRecord(String typeName){
+    public boolean deleteWeightsRecord(String mWeight){
         boolean result = false;
 
-        String query = "SELECT * FROM " + TABLE_WORKOUTTYPE + " WHERE " + COLUMN_NAME + " = \"" + typeName + "\"";
+        String query = "Select * From " + TABLE_WORKOUT + "WHERE " + COLUMN_NAME + " = \"" + mWeight + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
-            int id = Integer.parseInt(cursor.getString(0));
-            db.delete(TABLE_WORKOUTTYPE, COLUMN_ID + " = ?",
-                    new String [] {String.valueOf(id)});
-            cursor.close();
-            result = true;
-        }
-        db.close();
-        return result;
-    }
-
-    public boolean deleteWeightsRecord(String exerciseName){
-        boolean result = false;
-
-        String query = "SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + COLUMN_NAME + " = \"" + exerciseName + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
+        WeightsRecord wr = new WeightsRecord();
 
         if(cursor.moveToFirst()){
-            int id = Integer.parseInt(cursor.getString(0));
-            db.delete(TABLE_WEIGHTS, COLUMN_ID + " = ?",
-                    new String [] {String.valueOf(id)});
+            wr.setId(Integer.parseInt(cursor.getString(0)));
+            db.delete(TABLE_WORKOUT,  COLUMN_NAME + " = ?",
+                    new String [] {String.valueOf(wr.getId())});
             cursor.close();
             result = true;
+
         }
         db.close();
         return result;
+
     }
 
-    public boolean deleteCardioRecord(String exerciseName){
-        boolean result = false;
-
-        String query = "SELECT * FROM " + TABLE_CARDIO + " WHERE " + COLUMN_NAME + " = \"" + exerciseName + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            int id = Integer.parseInt(cursor.getString(0));
-            db.delete(TABLE_CARDIO, COLUMN_ID + " = ?",
-                    new String [] {String.valueOf(id)});
-            cursor.close();
-            result = true;
-        }
-        db.close();
-        return result;
-    }
-
-    public boolean deleteGlobalTableRecord(int id){
-        boolean result = false;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        int deletionCount = db.delete(TABLE_GLOBALTABLE, COLUMN_ID + " = ?",
-                new String [] {String.valueOf(id)});
-
-        if(deletionCount > 0){
-            result = true;
-        }
-
-        db.close();
-        return result;
-    }
-
-
-    public ArrayList<WorkoutTypeRecord> getLongestWorkoutTypes() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor workoutTypesRecords = db.rawQuery("SELECT * FROM " + TABLE_WORKOUTTYPE + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
-        ArrayList<WorkoutTypeRecord> workoutTypeRecordsArrayList = new ArrayList<>();
-        if (workoutTypesRecords.moveToFirst()) {
-            do {
-                workoutTypeRecordsArrayList.add(new WorkoutTypeRecord(
-                        workoutTypesRecords.getInt(0),
-                        workoutTypesRecords.getString(1),
-                        workoutTypesRecords.getFloat(2)));
-            } while (workoutTypesRecords.moveToNext());
-        }
-        workoutTypesRecords.close();
-        return workoutTypeRecordsArrayList;
-    }
-
-    public ArrayList<WeightsRecord> getHeaviestWeightsSessions() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor weightsRecords = db.rawQuery("SELECT * FROM " + TABLE_WEIGHTS + " ORDER BY " + COLUMN_WEIGHT + " DESC LIMIT 3", null);
-        ArrayList<WeightsRecord> weightsRecordsArrayList = new ArrayList<>();
-        if (weightsRecords.moveToFirst()) {
-            do {
-                weightsRecordsArrayList.add(new WeightsRecord(weightsRecords.getInt(0), weightsRecords.getString(1), "defaultType", weightsRecords.getFloat(2)));
-            } while (weightsRecords.moveToNext());
-        }
-        weightsRecords.close();
-        return weightsRecordsArrayList;
-    }
-
-
-    public ArrayList<CardioRecord> getLongestCardioSessions() {
+    public ArrayList<CardioRecord> getLongestCardioSessions(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cardioRecords = db.rawQuery("SELECT * FROM " + TABLE_CARDIO + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
         ArrayList<CardioRecord> cardioRecordsArrayList = new ArrayList<>();
@@ -610,6 +454,7 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 cardioRecordsArrayList.add(new CardioRecord(
                         cardioRecords.getInt(0),
+                        "cardio",
                         cardioRecords.getString(1),
                         cardioRecords.getFloat(2)));
             } while (cardioRecords.moveToNext());
@@ -732,7 +577,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         // code sourced from https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/
-        // sort all workouts by ID/date (Newest ID = newest date),
+        // sort all workouts by ID (Newest ID first),
         // with the newest first (i.e. reverse order of IDs)
         allWorkouts.sort(Comparator.comparing(WorkoutRecord::getmId).reversed());
 
@@ -742,5 +587,5 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-
 }
+
