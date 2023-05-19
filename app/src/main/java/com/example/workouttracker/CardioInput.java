@@ -1,9 +1,11 @@
 package com.example.workouttracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,11 +24,13 @@ public class CardioInput extends AppCompatActivity {
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date, workout_date;
+    Button saveButton, addExerciseButton, deleteButton;
 
     // initialise empty array list
     ArrayList<CardioRecord> cardioWorkout = new ArrayList<CardioRecord>();
 
     CardioAdapter cAdapter;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,12 @@ public class CardioInput extends AppCompatActivity {
 
         // recieve intent from previous activity
         Intent receiving = getIntent();
+
+        saveButton = (Button) findViewById(R.id.save_button);
+        addExerciseButton = (Button) findViewById(R.id.add_exercise_button);
+        deleteButton = (Button) findViewById(R.id.delete_button);
+        // hide delete button
+        deleteButton.setVisibility(View.INVISIBLE);
 
         // will implement here an if statemnet checking the intent, weather it comes from
         // new workout button or press on home screen list to see previous workout
@@ -101,6 +111,11 @@ public class CardioInput extends AppCompatActivity {
     }
 
     public void saveWeightsWorkout(View view){
+        // remove add and save buttons
+        saveButton.setVisibility(View.INVISIBLE);
+        addExerciseButton.setVisibility(View.INVISIBLE);
+        // show delete button
+        deleteButton.setVisibility(View.VISIBLE);
         // need to check 1 (version) parameter
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         // get current date and insert e_workout table, recording a new workout

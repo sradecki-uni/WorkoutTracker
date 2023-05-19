@@ -124,8 +124,8 @@
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="106dp"
-        android:layout_height="54dp"
+        android:layout_width="108dp"
+        android:layout_height="55dp"
         android:onClick="saveWeightsWorkout"
         android:text="@string/save_text"
         android:textSize="14sp"
@@ -138,8 +138,8 @@
 
     <Button
         android:id="@+id/add_exercise_button"
-        android:layout_width="106dp"
-        android:layout_height="54dp"
+        android:layout_width="108dp"
+        android:layout_height="55dp"
         android:onClick="addExercise"
         android:text="@string/add_exercise_text"
         android:textSize="14sp"
@@ -161,6 +161,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.146" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="108dp"
+        android:layout_height="55dp"
+        android:text="@string/delete_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.208" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
