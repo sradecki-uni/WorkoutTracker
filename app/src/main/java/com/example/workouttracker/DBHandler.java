@@ -322,7 +322,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int id;
         try {
             String query = "SELECT " + COLUMN_ID + " FROM " + TABLE_TYPE + " WHERE "
-                    + COLUMN_NAME + " = '"  + cr.getmType() + "'";
+                    + COLUMN_NAME + " = '"  + cr.getType() + "'";
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();

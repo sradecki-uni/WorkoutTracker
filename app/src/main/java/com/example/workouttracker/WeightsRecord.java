@@ -55,6 +55,9 @@ public class WeightsRecord {
     public String getExercise() {
         return mExercise;
     }
+    public String getType() {
+        return mType;
+    }
     public int getId() {
         return mId;
     }
@@ -90,4 +93,6 @@ public class WeightsRecord {
     public void setId(int Id) {
         this.mId = Id;
     }
+
+    public void setmType(String type){mType = type;}
 }

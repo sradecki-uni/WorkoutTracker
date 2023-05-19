@@ -45,6 +45,10 @@ public class CardioRecord {
         return mTime;
     }
 
+    public String getType() {
+        return mType;
+    }
+
     public float getmDistance() {
         return mDistance;
     }
