@@ -135,6 +135,7 @@
         android:id="@+id/delete_button"
         android:layout_width="108dp"
         android:layout_height="55dp"
+        android:onClick="deleteCardioWorkout"
         android:text="@string/delete_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

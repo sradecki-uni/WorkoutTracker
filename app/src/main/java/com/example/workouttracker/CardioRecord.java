@@ -68,4 +68,10 @@ public class CardioRecord {
     public void setId(int Id) {
         this.mId = Id;
     }
+
+    public boolean isEmpty() {
+        return mId == 0 && mExercise.equals("") &&
+                mDistance == 0.0F && mTime.equals("");
+
+    }
 }

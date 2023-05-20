@@ -135,6 +135,13 @@ public class CardioAdapter extends
         EditText distanceEditView = holder.distanceView;
         distanceEditView.setText(Float.toString(cardioRecord.getmDistance()));
 
+        // make views uneditable if saved
+        if(!cardioRecord.isEmpty()){
+            exerciseEditView.setFocusable(false);
+            timeEditView.setFocusable(false);
+            distanceEditView.setFocusable(false);
+        }
+
 
     }
 

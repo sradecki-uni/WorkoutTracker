@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +26,8 @@ public class CardioInput extends AppCompatActivity {
     SimpleDateFormat dateFormat;
     String date, workout_date;
     Button saveButton, addExerciseButton, deleteButton;
+    String workout_id;
+    WorkoutRecord previousWorkout;
 
     // initialise empty array list
     ArrayList<CardioRecord> cardioWorkout = new ArrayList<CardioRecord>();
@@ -38,23 +41,16 @@ public class CardioInput extends AppCompatActivity {
 
         // recieve intent from previous activity
         Intent receiving = getIntent();
+        // get workout id from the home screen
+        // if 0 - new workout, not 0 old workout
+        workout_id = receiving.getStringExtra(MainActivity.WORKOUT_ID);
 
         saveButton = (Button) findViewById(R.id.save_button);
         addExerciseButton = (Button) findViewById(R.id.add_exercise_button);
         deleteButton = (Button) findViewById(R.id.delete_button);
+        dateDisplay = (TextView)findViewById(R.id.date_view);
         // hide delete button
         deleteButton.setVisibility(View.INVISIBLE);
-
-        // will implement here an if statemnet checking the intent, weather it comes from
-        // new workout button or press on home screen list to see previous workout
-
-        // https://medium.com/@shayma_92409/display-the-current-date-android-studio-f582bf14f908
-        // to display the date at the top of the screen
-        dateDisplay = (TextView)findViewById(R.id.date_view);
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
-        date = dateFormat.format(calendar.getTime());
-        dateDisplay.setText(date);
 
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -64,19 +60,67 @@ public class CardioInput extends AppCompatActivity {
         // find recyclerview activity layout for this activity
         RecyclerView rvCardio = (RecyclerView) findViewById(R.id.rv_cardio);
 
-        // Initialize weights records - this will be changed for the database
-//        weightsWorkout = WeightsRecord.createWeightsWorkout(10);
-        cardioWorkout.add(new CardioRecord());
-        // Create adapter and pass workout records
-        cAdapter = new CardioAdapter(cardioWorkout);
-        // Attach adapter to the recyclerview to populate
-        rvCardio.setAdapter(cAdapter);
-        // layout manager position the records
-        rvCardio.setLayoutManager(new LinearLayoutManager(this));
-
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         // on create, create predefined type table
         dbHandler.createTypeTable();
+
+        if (workout_id.equals("0")){
+            // hide delete button
+            deleteButton.setVisibility(View.INVISIBLE);
+
+            // https://medium.com/@shayma_92409/display-the-current-date-android-studio-f582bf14f908
+            // to display the date at the top of the screen
+            calendar = Calendar.getInstance();
+            dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+            date = dateFormat.format(calendar.getTime());
+            dateDisplay.setText(date);
+
+            // Initialize cardio records - this will be changed for the database
+            cardioWorkout.add(new CardioRecord());
+            // Create adapter and pass workout records
+            cAdapter = new CardioAdapter(cardioWorkout);
+            // Attach adapter to the recyclerview to populate
+            rvCardio.setAdapter(cAdapter);
+            // layout manager position the records
+            rvCardio.setLayoutManager(new LinearLayoutManager(this));
+
+        } else {
+            // show an old workout
+            // show delete button
+            deleteButton.setVisibility(View.VISIBLE);
+            // hide others
+            addExerciseButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+
+            saveStatus = (TextView) findViewById(R.id.save_status);
+            saveStatus.setText(R.string.saved_status_text);
+            saveStatus.setTextColor(getColor(R.color.purple_700));
+
+            previousWorkout = dbHandler.getWeightsWorkout(workout_id);
+
+            String prevDate = previousWorkout.getmDate();
+
+            // https://medium.com/@shayma_92409/display-the-current-date-android-studio-f582bf14f908
+            // to display the date at the top of the screen
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date temp = dateFormat.parse(prevDate);
+                dateFormat.applyPattern("EEE, MMM d, yyyy");
+                date = dateFormat.format(temp);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            dateDisplay.setText(date);
+            // get the weights records
+            cardioWorkout = previousWorkout.getAllCardioRecords();
+            // Create adapter and pass workout records
+            cAdapter = new CardioAdapter(cardioWorkout);
+            // Attach adapter to the recyclerview to populate
+            rvCardio.setAdapter(cAdapter);
+            // layout manager position the records
+            rvCardio.setLayoutManager(new LinearLayoutManager(this));
+        }
+
 
 
 
@@ -159,5 +203,25 @@ public class CardioInput extends AppCompatActivity {
         saveStatus.setText(R.string.saved_status_text);
         saveStatus.setTextColor(getColor(R.color.purple_700));
 
+        cAdapter.notifyDataSetChanged();
+
+    }
+
+    public void deleteCardioWorkout(View view){
+        DBHandler dbHandler = new DBHandler(this, null, null, 1);
+
+        // deleting the workout that was just saved
+        if(workout_id.equals("0")){
+            // get newest workout id, i.e. this workout
+            String id = String.valueOf(dbHandler.getNewestEWorkoutID());
+            dbHandler.DeleteCardioWorkout(id);
+            // return to home screen
+            this.finish();
+        } else {
+            // delete the workout id that was passed as an intent
+            dbHandler.DeleteCardioWorkout(workout_id);
+            // return to home screen
+            this.finish();
+        }
     }
 }

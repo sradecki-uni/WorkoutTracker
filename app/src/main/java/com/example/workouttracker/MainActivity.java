@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void newCardioWorkout(View view){
         Intent myIntent = new Intent(this, CardioInput.class);
+        // pass 0 if new workout
+        myIntent.putExtra(WORKOUT_ID, "0");
 
         startActivity(myIntent);
     }

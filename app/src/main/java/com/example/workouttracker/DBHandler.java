@@ -637,15 +637,17 @@ public class DBHandler extends SQLiteOpenHelper {
 
             }
             while (workoutRecords_weights_cursor.moveToNext());
+
+            workoutRecords_weights_cursor.close();
         }
 
-
+        db.close();
 
         return workoutRecord;
     }
 
-    public WorkoutRecord DeleteWeightsWorkout(String id){
-        WorkoutRecord workoutRecord = new WorkoutRecord();
+    public Boolean DeleteWeightsWorkout(String id){
+        boolean result = false;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -676,13 +678,123 @@ public class DBHandler extends SQLiteOpenHelper {
 
             }
             while (workoutRecords_weights_cursor.moveToNext());
+
+            workoutRecords_weights_cursor.close();
+            result = true;
         }
         // after deleting all records for given workout in e_weights and r_workout_exercise
         // delete from workout table
         db.delete(TABLE_WORKOUT, COLUMN_ID + " = ?", new String[] {String.valueOf(workoutID)});
 
+        workoutRecords_weights_cursor.close();
+        db.close();
+
+
+        return result;
+    }
+
+
+    public WorkoutRecord getCardioWorkout(String id){
+        WorkoutRecord workoutRecord = new WorkoutRecord();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        // returns format: workoutID | date | Exercise name | Time | Distance | type
+        String cardioQuery = "SELECT " +
+                TABLE_WORKOUT + "." + COLUMN_ID + ", " +
+                TABLE_WORKOUT + "." + COLUMN_DATE + ", " +
+                TABLE_EXERCISE + "." + COLUMN_NAME + ", " +
+                TABLE_CARDIO + "." + COLUMN_TIME + ", " +
+                TABLE_CARDIO + "." + COLUMN_DISTANCE + ", " +
+                TABLE_TYPE + "." + COLUMN_NAME +
+                " FROM " + TABLE_WORKOUT +
+                " JOIN " + TABLE_WORKOUT_EXERCISE + " ON " +
+                TABLE_WORKOUT + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_WORKOUTID +
+                " JOIN " + TABLE_EXERCISE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_EXERCISE_TYPE + " ON " +
+                TABLE_EXERCISE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_EXERCISID +
+                " JOIN " + TABLE_TYPE + " ON " +
+                TABLE_TYPE + "." + COLUMN_ID + " = " + TABLE_EXERCISE_TYPE + "." + COLUMN_TYPEID +
+                " JOIN " + TABLE_CARDIO + " ON " +
+                TABLE_CARDIO + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_CARDIOID +
+                " WHERE " + TABLE_WORKOUT + "." + COLUMN_ID + " == " + id;
+
+
+        // get any weights records
+        Cursor workoutRecords_cardio_cursor = db.rawQuery(cardioQuery, null);
+
+        if(workoutRecords_cardio_cursor.moveToFirst()){
+            do {
+                workoutRecord.setmId(workoutRecords_cardio_cursor.getInt(0));
+                workoutRecord.setmDate(workoutRecords_cardio_cursor.getString(1));
+                workoutRecord.addCardioRecord(
+                        // set id for cardio record to 0,
+                        // as it doesnt necessarily matter when getting records from database
+                        0,
+                        // get name
+                        workoutRecords_cardio_cursor.getString(2),
+                        // get time
+                        workoutRecords_cardio_cursor.getString(3),
+                        // get distance
+                        workoutRecords_cardio_cursor.getFloat(4)
+                );
+
+            }
+            while (workoutRecords_cardio_cursor.moveToNext());
+
+            workoutRecords_cardio_cursor.close();
+        }
+
+        db.close();
 
         return workoutRecord;
+    }
+
+    public Boolean DeleteCardioWorkout(String id){
+        boolean result = false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // returns format: workoutID | weightsID
+        String cardioQuery = "SELECT " +
+                TABLE_WORKOUT + "." + COLUMN_ID + ", " +
+                TABLE_CARDIO + "." + COLUMN_ID  +
+                " FROM " + TABLE_WORKOUT +
+                " JOIN " + TABLE_WORKOUT_EXERCISE + " ON " +
+                TABLE_WORKOUT + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_WORKOUTID +
+                " JOIN " + TABLE_CARDIO + " ON " +
+                TABLE_CARDIO + "." + COLUMN_ID + " = " + TABLE_WORKOUT_EXERCISE + "." + COLUMN_CARDIOID +
+                " WHERE " + TABLE_WORKOUT + "." + COLUMN_ID + " == " + id;
+
+
+        // get any weights records
+        Cursor workoutRecords_cardio_cursor = db.rawQuery(cardioQuery, null);
+
+        // delete workout id from workout table after all related e_weights and r_workout_exercise records
+        int workoutID = 0;
+        if(workoutRecords_cardio_cursor.moveToFirst()){
+            do {
+                workoutID = workoutRecords_cardio_cursor.getInt(0);
+                int cardioID = workoutRecords_cardio_cursor.getInt(1);
+                db.delete(TABLE_CARDIO, COLUMN_ID + " = ?", new String[] {String.valueOf(cardioID)});
+                db.delete(TABLE_WORKOUT_EXERCISE, COLUMN_WEIGHTSID + " = ?",
+                        new String[] {String.valueOf(cardioID)});
+
+            }
+            while (workoutRecords_cardio_cursor.moveToNext());
+
+            workoutRecords_cardio_cursor.close();
+            result = true;
+        }
+        // after deleting all records for given workout in e_weights and r_workout_exercise
+        // delete from workout table
+        db.delete(TABLE_WORKOUT, COLUMN_ID + " = ?", new String[] {String.valueOf(workoutID)});
+
+        workoutRecords_cardio_cursor.close();
+        db.close();
+
+
+        return result;
     }
 
 
