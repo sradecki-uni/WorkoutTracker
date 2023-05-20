@@ -13,7 +13,7 @@ public class WeightsRecord {
         mSets = 0;
         mReps = 0;
         mWeight = 0.0F;
-        mType = "Weights";
+        mType = "";
     }
 
     public WeightsRecord(int id, String exercise){
@@ -22,7 +22,7 @@ public class WeightsRecord {
         mSets = 1;
         mReps = 1;
         mWeight = 0.0F;
-        mType = "Weights";
+        mType = "";
     }
 
     public WeightsRecord(int id, String exercise, String type, float weight){
@@ -95,4 +95,10 @@ public class WeightsRecord {
     }
 
     public void setmType(String type){mType = type;}
+
+    public boolean isEmpty() {
+        return mId == 0 && mExercise.equals("") && mSets == 0 &&
+                mReps == 0 && mWeight == 0.0F && mType.equals("");
+
+    }
 }

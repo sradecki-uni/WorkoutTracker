@@ -13,6 +13,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String WORKOUT_ID = "com.example.workouttracker.workoutid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +22,17 @@ public class MainActivity extends AppCompatActivity {
         // test code ///////////////////////////////////////
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
-        String allTypes = allWorkouts.get(12).getAllTypes();
+//        String allTypes = allWorkouts.get(12).getAllTypes();
         System.out.println(allWorkouts);
         // end test code ///////////////////////////////////////
     }
 
     public void newWeightsWorkout(View view){
         Intent myIntent = new Intent(this, WeightsInput.class);
+        // testing passing workout ID with intent
+        // if your database doesnt have atleast 24 wokouts and the newest one isnt a weights workout
+        // the following line wont work
+        // myIntent.putExtra(WORKOUT_ID, "24");
 
         startActivity(myIntent);
     }

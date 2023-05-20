@@ -64,7 +64,7 @@ public class WorkoutRecord {
         return null;
     }
 
-    public ArrayList<WeightsRecord> getAllWeightsIDs(){
+    public ArrayList<WeightsRecord> getAllWeightsRecords(){
         return mWeightsRecords;
     }
 

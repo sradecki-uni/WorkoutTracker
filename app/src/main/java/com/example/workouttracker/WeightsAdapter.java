@@ -192,12 +192,19 @@ public class WeightsAdapter extends
         // Get the data model based on position
         WeightsRecord weightsRecord = mWeightsWorkout.get(position);
 
+
+
         // Set item views based on your views and data model
         EditText exerciseEditView = holder.exerciseView;
         exerciseEditView.setText(weightsRecord.getExercise());
 //        EditText typeEditView = holder.typeView;
 //        typeEditView.setText(weightsRecord.getType());
         Spinner typeSpinnerView = holder.typeSpinner;
+        // if not a new workout find the type to display
+        if (weightsRecord.getType() != "") {
+            int spinnerPosition = adapter.getPosition(weightsRecord.getType());
+            typeSpinnerView.setSelection(spinnerPosition);
+        }
         EditText setsEditView = holder.setsView;
         setsEditView.setText(Integer.toString(weightsRecord.getSets()));
         EditText repsEditView = holder.repsView;
@@ -205,6 +212,13 @@ public class WeightsAdapter extends
         EditText weightEditView = holder.weightView;
         weightEditView.setText(Float.toString(weightsRecord.getWeight()));
 
+        if(!weightsRecord.isEmpty()){
+            exerciseEditView.setFocusable(false);
+            typeSpinnerView.setEnabled(false);
+            setsEditView.setFocusable(false);
+            repsEditView.setFocusable(false);
+            weightEditView.setFocusable(false);
+        }
 
     }
 
