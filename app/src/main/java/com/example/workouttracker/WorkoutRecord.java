@@ -45,11 +45,11 @@ public class WorkoutRecord {
 
 
     public boolean isWeights(){
-        return mWeightsRecords.isEmpty();
+        return !mWeightsRecords.isEmpty();
     }
 
     public boolean isCardio(){
-        return mCardioRecords.isEmpty();
+        return !mCardioRecords.isEmpty();
     }
 
     public String getAllTypes(){

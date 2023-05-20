@@ -165,6 +165,7 @@ public class WeightsInput extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void saveWeightsWorkout(View view){
         // remove add and save buttons
         saveButton.setVisibility(View.INVISIBLE);
