@@ -171,7 +171,8 @@ public class CardioInput extends AppCompatActivity {
                 saveStatus.setTextColor(getColor(R.color.red));
                 return;
             }
-            if(!cAdapter.mCardioWorkout.get(i).isValidTime()){
+            // time can be empty if distance is input, but if not empty check its valid
+            if(!cAdapter.mCardioWorkout.get(i).isValidTime() && !cAdapter.mCardioWorkout.get(i).getmTime().equals("")){
                 saveStatus.setText(R.string.invalid_time);
                 saveStatus.setTextColor(getColor(R.color.red));
                 return;
@@ -201,13 +202,12 @@ public class CardioInput extends AppCompatActivity {
             // add record to e_weights and e_exercise table
             dbHandler.addCardio(record);
             dbHandler.addExercise(record);
-            // set id in array for each weights records
-//            new_weights_id = (weights_id += 1);
+
             // gat the id of the last weights record added
             int new_cardio_id = dbHandler.getNewestECardioID();
             // get the exercise ID for the exercise in current weight record
             int new_exercise_id = dbHandler.getExerciseID(record);
-            // get the type ID for current weight record
+            // get the type ID for current cardio record
             int new_type_id = dbHandler.getTypeID(record);
 
             // add exercise and type to r_exercise_type, exerciseID fields unique
