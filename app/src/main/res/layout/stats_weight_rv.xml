@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/idWeightsId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="ID"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/idSets"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="Sets"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/idReps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="Reps"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/idWeights"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="Weight"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold" />
+
+</LinearLayout>

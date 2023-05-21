@@ -797,6 +797,28 @@ public class DBHandler extends SQLiteOpenHelper {
         return result;
     }
 
+    public ArrayList<WeightsRecord> getHeaviestChestLifts(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor weightRecords
+                = db.rawQuery("SELECT * FROM " + TABLE_WEIGHTS+ " ORDER BY " + COLUMN_WEIGHT+ " DESC LIMIT 3", null);
+        ArrayList<WeightsRecord> weightsRecordsArrayList
+                = new ArrayList<>();
+        if (weightRecords.moveToFirst()) {
+            do {
+                // on below line we are adding the data from
+                // cursor to our array list.
+                weightsRecordsArrayList.add(new WeightsRecord(
+                        weightRecords.getInt(0),"weight", "weight",
+                        weightRecords.getInt(1),
+                        weightRecords.getInt(2),
+                        weightRecords.getFloat(3)));
+            } while (weightRecords.moveToNext());
+            // moving our cursor to next.
+        }
+        weightRecords.close();
+        return weightsRecordsArrayList;
+    }
+
 
 
 
