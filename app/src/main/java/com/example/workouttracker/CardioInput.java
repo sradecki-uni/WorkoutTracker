@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CardioInput extends AppCompatActivity {
     TextView dateDisplay, saveStatus;;
@@ -28,6 +30,7 @@ public class CardioInput extends AppCompatActivity {
     Button saveButton, addExerciseButton, deleteButton;
     String workout_id;
     WorkoutRecord previousWorkout;
+    RecyclerView rvCardio;
 
     // initialise empty array list
     ArrayList<CardioRecord> cardioWorkout = new ArrayList<CardioRecord>();
@@ -45,6 +48,7 @@ public class CardioInput extends AppCompatActivity {
         // if 0 - new workout, not 0 old workout
         workout_id = receiving.getStringExtra(MainActivity.WORKOUT_ID);
 
+        saveStatus = (TextView) findViewById(R.id.save_status_c);
         saveButton = (Button) findViewById(R.id.save_button);
         addExerciseButton = (Button) findViewById(R.id.add_exercise_button);
         deleteButton = (Button) findViewById(R.id.delete_button);
@@ -58,7 +62,7 @@ public class CardioInput extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // find recyclerview activity layout for this activity
-        RecyclerView rvCardio = (RecyclerView) findViewById(R.id.rv_cardio);
+        rvCardio = (RecyclerView) findViewById(R.id.rv_cardio);
 
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         // on create, create predefined type table
@@ -74,6 +78,8 @@ public class CardioInput extends AppCompatActivity {
             dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
             date = dateFormat.format(calendar.getTime());
             dateDisplay.setText(date);
+
+
 
             // Initialize cardio records - this will be changed for the database
             cardioWorkout.add(new CardioRecord());
@@ -92,11 +98,10 @@ public class CardioInput extends AppCompatActivity {
             addExerciseButton.setVisibility(View.INVISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
 
-            saveStatus = (TextView) findViewById(R.id.save_status);
             saveStatus.setText(R.string.saved_status_text);
             saveStatus.setTextColor(getColor(R.color.purple_700));
 
-            previousWorkout = dbHandler.getWeightsWorkout(workout_id);
+            previousWorkout = dbHandler.getCardioWorkout(workout_id);
 
             String prevDate = previousWorkout.getmDate();
 
@@ -152,9 +157,26 @@ public class CardioInput extends AppCompatActivity {
 //        wAdapter.notifyDataSetChanged();
         cAdapter.notifyItemInserted(cAdapter.mCardioWorkout.size());
 
+        // scroll to bottom when new exercise inserted
+        rvCardio.scrollToPosition(cAdapter.mCardioWorkout.size() - 1);
+
     }
 
-    public void saveWeightsWorkout(View view){
+    public void saveCardioWorkout(View view){
+        // check each record to save that enough data has been input
+        for(int i = 0; i < cAdapter.mCardioWorkout.size(); i++){
+            // check at least name AND (time or distance) and that time is valid
+            if (!cAdapter.mCardioWorkout.get(i).isEnoughToSave()){
+                saveStatus.setText(R.string.fill_saved_status_text_c);
+                saveStatus.setTextColor(getColor(R.color.red));
+                return;
+            }
+            if(!cAdapter.mCardioWorkout.get(i).isValidTime()){
+                saveStatus.setText(R.string.invalid_time);
+                saveStatus.setTextColor(getColor(R.color.red));
+                return;
+            }
+        }
         // remove add and save buttons
         saveButton.setVisibility(View.INVISIBLE);
         addExerciseButton.setVisibility(View.INVISIBLE);
@@ -224,4 +246,7 @@ public class CardioInput extends AppCompatActivity {
             this.finish();
         }
     }
+
+
+
 }

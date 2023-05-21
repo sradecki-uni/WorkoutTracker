@@ -101,4 +101,10 @@ public class WeightsRecord {
                 mReps == 0 && mWeight == 0.0F && mType.equals("");
 
     }
+
+    public boolean isEnoughToSave() {
+        return !(mExercise.equals("") || mSets == 0 ||
+                mReps == 0);
+
+    }
 }

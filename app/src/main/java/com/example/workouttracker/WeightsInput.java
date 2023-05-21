@@ -37,6 +37,7 @@ public class WeightsInput extends AppCompatActivity {
     WeightsAdapter wAdapter;
 
     WorkoutRecord previousWorkout;
+    RecyclerView rvWeights;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,7 +57,7 @@ public class WeightsInput extends AppCompatActivity {
         deleteButton = (Button) findViewById(R.id.delete_button);
         dateDisplay = (TextView)findViewById(R.id.date_view);
         // find recyclerview activity layout for this activity
-        RecyclerView rvWeights = (RecyclerView) findViewById(R.id.rv_weights);
+        rvWeights = (RecyclerView) findViewById(R.id.rv_weights);
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         // on create, create predefined type table
         dbHandler.createTypeTable();
@@ -76,6 +77,10 @@ public class WeightsInput extends AppCompatActivity {
             dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
             date = dateFormat.format(calendar.getTime());
             dateDisplay.setText(date);
+
+            saveStatus = (TextView) findViewById(R.id.save_status);
+            saveStatus.setText(R.string.not_saved_status_text);
+            saveStatus.setTextColor(getColor(R.color.black));
 
             // Initialize weights records - this will be changed for the database
             weightsWorkout.add(new WeightsRecord());
@@ -125,20 +130,6 @@ public class WeightsInput extends AppCompatActivity {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
     // code for back button
     @Override
@@ -154,24 +145,34 @@ public class WeightsInput extends AppCompatActivity {
 
 
     public void addExercise(View view){
-
-
         // add new empty record
         //weightsWorkout.add(new WeightsRecord());
         wAdapter.mWeightsWorkout.add(new WeightsRecord());
         // notify the adapter to show on screen
 //        wAdapter.notifyDataSetChanged();
         wAdapter.notifyItemInserted(wAdapter.mWeightsWorkout.size());
+        // scroll to bottom when new exercise inserted
+        rvWeights.scrollToPosition(wAdapter.mWeightsWorkout.size() - 1);
 
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveWeightsWorkout(View view){
+        // check each record to save that enough data has been input
+        for(int i = 0; i < wAdapter.mWeightsWorkout.size(); i++){
+            // dont save any empty records
+            if (!wAdapter.mWeightsWorkout.get(i).isEnoughToSave()){
+                saveStatus.setText(R.string.fill_saved_status_text_w);
+                saveStatus.setTextColor(getColor(R.color.red));
+                return;
+            }
+        }
         // remove add and save buttons
         saveButton.setVisibility(View.INVISIBLE);
         addExerciseButton.setVisibility(View.INVISIBLE);
         // show delete button
         deleteButton.setVisibility(View.VISIBLE);
+
         // need to check 1 (version) parameter
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         // get current date and insert e_workout table, recording a new workout
