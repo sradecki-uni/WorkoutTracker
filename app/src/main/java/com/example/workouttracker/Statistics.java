@@ -22,9 +22,11 @@ public class Statistics extends AppCompatActivity{
     SimpleDateFormat dateFormat;
     String date;
     private ArrayList<CardioRecord> cardioModalArrayList;
+    private ArrayList<WeightsRecord> weightModalArrayList;
     private DBHandler dbHandler;
     private StatsCardioAdapter cardioAdapter;
-    private RecyclerView cardioRV;
+    private StatsWeightAdapter weightAdapter;
+    private RecyclerView cardioRV,weightRV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class Statistics extends AppCompatActivity{
         // on create, create predefined type table
         cardioModalArrayList = new ArrayList<>();
         cardioModalArrayList = dbHandler.getLongestCardioSessions();
+        weightModalArrayList = new ArrayList<>();
+        weightModalArrayList = dbHandler.getHeaviestChestLifts();
         // receive intent from previous activity
         Intent receiving = getIntent();
         // calling the action bar
@@ -50,7 +54,11 @@ public class Statistics extends AppCompatActivity{
         cardioRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         // setting our adapter to recycler view.
         cardioRV.setAdapter(cardioAdapter);
-
+        weightAdapter = new StatsWeightAdapter(weightModalArrayList,this);
+        weightRV = (RecyclerView) findViewById(R.id.idRVWeights);
+        weightRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        // setting our adapter to recycler view.
+        weightRV.setAdapter(weightAdapter);
     }
 
     @Override
