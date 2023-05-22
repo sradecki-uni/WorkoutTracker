@@ -21,9 +21,8 @@ public class MainActivity extends AppCompatActivity {
         // test code ///////////////////////////////////////
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
         ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
-        // get string of the types
-        // String allTypes = allWorkouts.get(12).getAllTypes();
-        // for choosing the type of intent can use isWeights() or isCardio on the WorkoutRecord
+//        String allTypes = allWorkouts.get(12).getAllTypes();
+//        System.out.println(allWorkouts)
         boolean cardio = allWorkouts.get(allWorkouts.size() - 1).isCardio();
         boolean weights = allWorkouts.get(allWorkouts.size() - 2).isWeights();
 
@@ -33,22 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void newWeightsWorkout(View view){
         Intent myIntent = new Intent(this, WeightsInput.class);
-        // testing passing workout ID with intent
-        // if your database doesnt have atleast 24 wokouts and the newest one isnt a weights workout
-        // the following line wont work
 
-        // myIntent.putExtra(WORKOUT_ID, "24")
-
-        // pass 0 if new workout
-        myIntent.putExtra(WORKOUT_ID, "0");
         startActivity(myIntent);
     }
 
     public void newCardioWorkout(View view){
         Intent myIntent = new Intent(this, CardioInput.class);
-        // pass 0 if new workout
         myIntent.putExtra(WORKOUT_ID, "0");
-
         startActivity(myIntent);
     }
 
