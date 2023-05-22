@@ -21,8 +21,8 @@ public class Statistics extends AppCompatActivity{
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date;
-    private ArrayList<CardioRecord> cardioModalArrayList;
-    private ArrayList<WeightsRecord> weightModalArrayList;
+    private ArrayList<CardioDto> cardioModalArrayList;
+    private ArrayList<WeightsDto> weightModalArrayList;
     private DBHandler dbHandler;
     private StatsCardioAdapter cardioAdapter;
     private StatsWeightAdapter weightAdapter;

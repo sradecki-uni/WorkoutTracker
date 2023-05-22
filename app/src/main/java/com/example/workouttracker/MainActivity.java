@@ -33,22 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void newWeightsWorkout(View view){
         Intent myIntent = new Intent(this, WeightsInput.class);
-        // testing passing workout ID with intent
-        // if your database doesnt have atleast 24 wokouts and the newest one isnt a weights workout
-        // the following line wont work
-
-        // myIntent.putExtra(WORKOUT_ID, "24")
-
-        // pass 0 if new workout
+        //startActivity(myIntent);
         myIntent.putExtra(WORKOUT_ID, "0");
         startActivity(myIntent);
     }
 
     public void newCardioWorkout(View view){
         Intent myIntent = new Intent(this, CardioInput.class);
-        // pass 0 if new workout
         myIntent.putExtra(WORKOUT_ID, "0");
-
         startActivity(myIntent);
     }
 

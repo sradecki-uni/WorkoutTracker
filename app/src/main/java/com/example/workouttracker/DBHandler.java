@@ -446,17 +446,29 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<CardioRecord> getLongestCardioSessions(){
+    public ArrayList<CardioDto> getLongestCardioSessions(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cardioRecords = db.rawQuery("SELECT * FROM " + TABLE_CARDIO + " ORDER BY " + COLUMN_TIME + " DESC LIMIT 3", null);
-        ArrayList<CardioRecord> cardioRecordsArrayList = new ArrayList<>();
+        String cardioQuery = "SELECT " +
+                TABLE_CARDIO + "." + COLUMN_ID + ", " +
+                TABLE_EXERCISE + "." + COLUMN_NAME + ", " +
+                TABLE_WORKOUT + "." + COLUMN_DATE + ", " +
+                TABLE_CARDIO + "." + COLUMN_TIME + ", " +
+                TABLE_CARDIO + "." + COLUMN_DISTANCE  + " FROM " + TABLE_CARDIO +","
+                + TABLE_WORKOUT +","+ TABLE_EXERCISE + "," + TABLE_WORKOUT_EXERCISE +
+                " WHERE " + TABLE_CARDIO +"."+ COLUMN_ID +"="+ TABLE_WORKOUT_EXERCISE +"."+ COLUMN_CARDIOID +
+                " AND " + TABLE_WORKOUT +"."+ COLUMN_ID +"=" + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_WORKOUTID +
+                " AND " + TABLE_EXERCISE +"."+ COLUMN_ID +"=" + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +
+                " ORDER BY " + TABLE_CARDIO + "." + COLUMN_TIME + " DESC LIMIT 3";
+        Cursor cardioRecords = db.rawQuery(cardioQuery,null);
+        ArrayList<CardioDto> cardioRecordsArrayList = new ArrayList<>();
         if (cardioRecords.moveToFirst()) {
             do {
-                cardioRecordsArrayList.add(new CardioRecord(
+                cardioRecordsArrayList.add(new CardioDto(
                         cardioRecords.getInt(0),
-                        "cardio",
                         cardioRecords.getString(1),
-                        cardioRecords.getFloat(2)));
+                        cardioRecords.getString(2),
+                        cardioRecords.getString(3),
+                        cardioRecords.getFloat(4)));
             } while (cardioRecords.moveToNext());
         }
         cardioRecords.close();
@@ -797,29 +809,40 @@ public class DBHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<WeightsRecord> getHeaviestChestLifts(){
+    public ArrayList<WeightsDto> getHeaviestChestLifts(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor weightRecords
-                = db.rawQuery("SELECT * FROM " + TABLE_WEIGHTS+ " ORDER BY " + COLUMN_WEIGHT+ " DESC LIMIT 3", null);
-        ArrayList<WeightsRecord> weightsRecordsArrayList
-                = new ArrayList<>();
+        String weightQuery = "SELECT " +
+                TABLE_WEIGHTS + "." + COLUMN_ID + ", " +
+                TABLE_EXERCISE + "." + COLUMN_NAME + ", " +
+                TABLE_TYPE + "." + COLUMN_NAME + ", " +
+                TABLE_WEIGHTS + "." + COLUMN_SETS + ", " +
+                TABLE_WEIGHTS + "." + COLUMN_REPS  +", " +
+                TABLE_WEIGHTS + "." + COLUMN_WEIGHT  + " FROM " + TABLE_WEIGHTS +","
+                + TABLE_TYPE +","+ TABLE_EXERCISE + "," + TABLE_WORKOUT_EXERCISE + "," + TABLE_EXERCISE_TYPE +
+                " WHERE " + TABLE_WEIGHTS +"."+ COLUMN_ID +"="+ TABLE_WORKOUT_EXERCISE +"."+ COLUMN_WEIGHTSID +
+                " AND " + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +"=" + TABLE_EXERCISE_TYPE +"."+ COLUMN_EXERCISID +
+                " AND " + TABLE_EXERCISE_TYPE +"."+ COLUMN_TYPEID+"=" + TABLE_TYPE +"."+ COLUMN_ID+
+                " AND " + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +"=" + TABLE_EXERCISE +"."+ COLUMN_ID+
+                " ORDER BY " + TABLE_WEIGHTS + "." + COLUMN_WEIGHT + " DESC LIMIT 3";
+        Cursor weightRecords =db.rawQuery(weightQuery,null);
+        ArrayList<WeightsDto> weightsRecordsArrayList = new ArrayList<>();
         if (weightRecords.moveToFirst()) {
             do {
                 // on below line we are adding the data from
                 // cursor to our array list.
-                weightsRecordsArrayList.add(new WeightsRecord(
-                        weightRecords.getInt(0),"weight", "weight",
-                        weightRecords.getInt(1),
-                        weightRecords.getInt(2),
-                        weightRecords.getFloat(3)));
+                weightsRecordsArrayList.add(new WeightsDto(
+                        weightRecords.getInt(0),
+                        weightRecords.getString(1),
+                        weightRecords.getString(2),
+                        weightRecords.getInt(3),
+                        weightRecords.getInt(4),
+                        weightRecords.getFloat(5)));
             } while (weightRecords.moveToNext());
             // moving our cursor to next.
         }
         weightRecords.close();
         return weightsRecordsArrayList;
     }
-
-
 
 
 }

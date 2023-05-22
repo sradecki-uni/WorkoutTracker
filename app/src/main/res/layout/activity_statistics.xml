@@ -46,14 +46,24 @@
         android:layout_below="@id/cardio_title"
         android:layout_marginTop="10dp">
         <TextView
-            android:id="@+id/textViewId"
+            android:id="@+id/textViewName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="ID"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:text="Name"
             android:textColor="#000000"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="Date"
+            android:textColor="#000000"
+            android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/textViewTime"
@@ -96,12 +106,22 @@
         android:layout_below="@id/lifts_title"
         android:layout_marginTop="10dp">
         <TextView
-            android:id="@+id/textViewWId"
+            android:id="@+id/textViewWName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="ID"
+            android:text="Name"
+            android:textColor="#000000"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/textViewWType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="Type"
             android:textColor="#000000"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
@@ -111,7 +131,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="Time"
+            android:text="Sets"
             android:textColor="#000000"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
@@ -121,7 +141,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="Distance"
+            android:text="Reps"
             android:textColor="#000000"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
@@ -131,7 +151,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="Distance"
+            android:text="Weight"
             android:textColor="#000000"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
