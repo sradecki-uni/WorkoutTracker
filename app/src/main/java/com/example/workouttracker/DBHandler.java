@@ -108,13 +108,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        // might not need to recreate type table as it will be predefined
-        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEIGHTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXERCISE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDIO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUT);
-        // will probably need to do the same for relational tables
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUT_EXERCISE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXERCISE_TYPE);
+
         onCreate(db);
 
     }

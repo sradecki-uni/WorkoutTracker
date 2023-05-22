@@ -20,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // test code ///////////////////////////////////////
         DBHandler dbHandler = new DBHandler(this, null, null, 1);
-        ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
+        // ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
         // get string of the types
         // String allTypes = allWorkouts.get(12).getAllTypes();
         // for choosing the type of intent can use isWeights() or isCardio on the WorkoutRecord
-        boolean cardio = allWorkouts.get(allWorkouts.size() - 1).isCardio();
-        boolean weights = allWorkouts.get(allWorkouts.size() - 2).isWeights();
+//        boolean cardio = allWorkouts.get(allWorkouts.size() - 1).isCardio();
+//        boolean weights = allWorkouts.get(allWorkouts.size() - 2).isWeights();
 
-        System.out.println(allWorkouts);
+        // System.out.println(allWorkouts);
         // end test code ///////////////////////////////////////
     }
 

@@ -83,7 +83,8 @@ public class CardioRecord {
                 mDistance != 0.0F);
 
     }
-    //
+
+    // code sourced from https://www.geeksforgeeks.org/validating-traditional-time-formats-using-regular-expression/
     public boolean isValidTime()
     {
         // Regex to check valid Time - range 0:0:0 to 23:59:59
