@@ -62,7 +62,7 @@ public class WeightsAdapter extends
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mWeightsWorkout.get(getAdapterPosition()).
-                            setmExercise(exerciseView.getText().toString());
+                            setmExercise(exerciseView.getText().toString().strip());
                 }
 
                 @Override

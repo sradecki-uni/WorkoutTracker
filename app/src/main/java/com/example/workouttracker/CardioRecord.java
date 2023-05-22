@@ -83,25 +83,20 @@ public class CardioRecord {
                 mDistance != 0.0F);
 
     }
-
-    // (HH:MM:SS  or HH:MM)
+    //
     public boolean isValidTime()
     {
         // Regex to check valid Time - range 0:0:0 to 23:59:59
         String regex
                 = "^(?:[01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]$";
 
-        // Compile the ReGex
+        // Compile regex
         Pattern pattern = Pattern.compile(regex);
 
-        //The string can be empty so dont need to check
-
-        // Pattern class contains matcher()
         // method to find matching between given str using regex.
         Matcher m = pattern.matcher(mTime);
 
-        // Return if the str
-        // matched the ReGex
+        // Return if time matched the ReGex
         return m.matches();
     }
 }

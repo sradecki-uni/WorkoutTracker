@@ -45,7 +45,7 @@ public class CardioAdapter extends
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mCardioWorkout.get(getAdapterPosition()).
-                            setmExercise(exerciseView.getText().toString());
+                            setmExercise(exerciseView.getText().toString().strip());
                 }
 
                 @Override
