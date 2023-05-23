@@ -62,7 +62,7 @@ public class WeightsAdapter extends
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mWeightsWorkout.get(getAdapterPosition()).
-                            setmExercise(exerciseView.getText().toString().strip());
+                            setExercise(exerciseView.getText().toString().strip());
                 }
 
                 @Override
@@ -79,7 +79,7 @@ public class WeightsAdapter extends
                                            int position, long id) {
                     Object item = adapterView.getItemAtPosition(position);
                     if (item != null) {
-                        mWeightsWorkout.get(getAdapterPosition()).setmType(typeSpinner.getSelectedItem().toString());
+                        mWeightsWorkout.get(getAdapterPosition()).setType(typeSpinner.getSelectedItem().toString());
                     }
 
 
@@ -110,7 +110,7 @@ public class WeightsAdapter extends
                     // weights record object
                     if (!"".equals(setsView.getText().toString())) {
                         mWeightsWorkout.get(getAdapterPosition()).
-                                setmSets(Integer.parseInt(setsView.getText().toString()));
+                                setSets(Integer.parseInt(setsView.getText().toString()));
 
                     }
                 }
@@ -132,7 +132,7 @@ public class WeightsAdapter extends
                     // weights record object
                     if (!"".equals(repsView.getText().toString())) {
                         mWeightsWorkout.get(getAdapterPosition()).
-                                setmReps(Integer.parseInt(repsView.getText().toString()));
+                                setReps(Integer.parseInt(repsView.getText().toString()));
 
                     }
                 }
@@ -155,7 +155,7 @@ public class WeightsAdapter extends
                     // weights record object
                     if (!"".equals(weightView.getText().toString())) {
                         mWeightsWorkout.get(getAdapterPosition()).
-                                setmWeight(Float.parseFloat(weightView.getText().toString()));
+                                setWeight(Float.parseFloat(weightView.getText().toString()));
 
                     }
                 }

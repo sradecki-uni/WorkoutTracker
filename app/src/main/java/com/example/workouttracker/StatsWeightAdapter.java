@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class StatsWeightAdapter extends RecyclerView.Adapter<StatsWeightAdapter.ViewHolder> {
-    private ArrayList<WeightsDto> WeightRecordArrayList;
+    private ArrayList<WeightsRecord> WeightRecordArrayList;
     private Context context;
-    public StatsWeightAdapter(ArrayList<WeightsDto> WeightRecordArrayList, Context context) {
+    public StatsWeightAdapter(ArrayList<WeightsRecord> WeightRecordArrayList, Context context) {
         this.WeightRecordArrayList =WeightRecordArrayList;
         this.context = context;
     }
@@ -31,8 +31,8 @@ public class StatsWeightAdapter extends RecyclerView.Adapter<StatsWeightAdapter.
     public void onBindViewHolder(@NonNull StatsWeightAdapter.ViewHolder holder, int position) {
         // on below line we are setting data
         // to our views of recycler view item.
-        WeightsDto modal = WeightRecordArrayList.get(position);
-        holder.name.setText(modal.getName());
+        WeightsRecord modal = WeightRecordArrayList.get(position);
+        holder.name.setText(modal.getExercise());
         holder.type.setText(modal.getType());
         holder.sets.setText(Integer.toString(modal.getSets()));
         holder.reps.setText(Integer.toString((modal.getReps())));

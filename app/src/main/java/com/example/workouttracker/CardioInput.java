@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CardioInput extends AppCompatActivity {
-    TextView dateDisplay, saveStatus;;
+    TextView dateDisplay, saveStatus;
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date, workout_date;
@@ -172,7 +172,7 @@ public class CardioInput extends AppCompatActivity {
                 return;
             }
             // time can be empty if distance is input, but if not empty check its valid
-            if(!cAdapter.mCardioWorkout.get(i).isValidTime() && !cAdapter.mCardioWorkout.get(i).getmTime().equals("")){
+            if(!cAdapter.mCardioWorkout.get(i).isValidTime() && !cAdapter.mCardioWorkout.get(i).getTime().equals("")){
                 saveStatus.setText(R.string.invalid_time);
                 saveStatus.setTextColor(getColor(R.color.red));
                 return;

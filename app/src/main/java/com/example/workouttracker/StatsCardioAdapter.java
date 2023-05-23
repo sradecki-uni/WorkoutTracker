@@ -14,11 +14,11 @@ import java.util.ArrayList;
 public class StatsCardioAdapter extends RecyclerView.Adapter<StatsCardioAdapter.ViewHolder> {
 
     // variable for our array list and context
-    private ArrayList<CardioDto> CardioRecordArrayList;
+    private ArrayList<CardioRecord> CardioRecordArrayList;
     private Context context;
 
     // constructor
-    public StatsCardioAdapter(ArrayList<CardioDto> CardioRecordArrayList, Context context) {
+    public StatsCardioAdapter(ArrayList<CardioRecord> CardioRecordArrayList, Context context) {
         this.CardioRecordArrayList =CardioRecordArrayList;
         this.context = context;
     }
@@ -36,8 +36,8 @@ public class StatsCardioAdapter extends RecyclerView.Adapter<StatsCardioAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // on below line we are setting data
         // to our views of recycler view item.
-        CardioDto modal = CardioRecordArrayList.get(position);
-        holder.cardioName.setText(modal.getName());
+        CardioRecord modal = CardioRecordArrayList.get(position);
+        holder.cardioName.setText(modal.getExercise());
         holder.cardioDate.setText(modal.getDate());
         holder.cardioTime.setText(modal.getTime());
         holder.cardioDistance.setText(Float.toString((modal.getDistance())));

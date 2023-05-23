@@ -155,8 +155,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addCardio( CardioRecord cr){
         ContentValues values_weights = new ContentValues();
-        values_weights.put(COLUMN_TIME, cr.getmTime());
-        values_weights.put(COLUMN_DISTANCE, cr.getmDistance());
+        values_weights.put(COLUMN_TIME, cr.getTime());
+        values_weights.put(COLUMN_DISTANCE, cr.getDistance());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -221,6 +221,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -239,6 +240,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -256,6 +258,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -274,6 +277,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -292,6 +296,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -310,6 +315,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -328,6 +334,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             cursor.moveToFirst();
             id = cursor.getInt(0);
+            cursor.close();
             db.close();
         }
         catch (Exception e){
@@ -406,17 +413,18 @@ public class DBHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
             wr.setId(cursor.getInt(0));
-            wr.setmExercise(cursor.getString(1));
-            wr.setmType(cursor.getString(2));
-            wr.setmSets(Integer.parseInt(cursor.getString(3)));
-            wr.setmReps(Integer.parseInt(cursor.getString(4)));
-            wr.setmWeight(Integer.parseInt(cursor.getString(5)));
+            wr.setExercise(cursor.getString(1));
+            wr.setType(cursor.getString(2));
+            wr.setSets(Integer.parseInt(cursor.getString(3)));
+            wr.setReps(Integer.parseInt(cursor.getString(4)));
+            wr.setWeight(Integer.parseInt(cursor.getString(5)));
 
 
         }
         else{
             wr = null;
         }
+        cursor.close();
         db.close();
         return wr;
 
@@ -447,7 +455,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<CardioDto> getLongestCardioSessions(){
+    public ArrayList<CardioRecord> getLongestCardioSessions(){
         SQLiteDatabase db = this.getReadableDatabase();
         String cardioQuery = "SELECT " +
                 TABLE_CARDIO + "." + COLUMN_ID + ", " +
@@ -461,10 +469,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 " AND " + TABLE_EXERCISE +"."+ COLUMN_ID +"=" + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +
                 " ORDER BY " + TABLE_CARDIO + "." + COLUMN_TIME + " DESC LIMIT 3";
         Cursor cardioRecords = db.rawQuery(cardioQuery,null);
-        ArrayList<CardioDto> cardioRecordsArrayList = new ArrayList<>();
+        ArrayList<CardioRecord> cardioRecordsArrayList = new ArrayList<>();
         if (cardioRecords.moveToFirst()) {
             do {
-                cardioRecordsArrayList.add(new CardioDto(
+                cardioRecordsArrayList.add(new CardioRecord(
                         cardioRecords.getInt(0),
                         cardioRecords.getString(1),
                         cardioRecords.getString(2),
@@ -588,7 +596,8 @@ public class DBHandler extends SQLiteOpenHelper {
             }
             while (workoutRecords_weights_cursor.moveToNext());
         }
-
+        workoutRecords_cardio_cursor.close();
+        workoutRecords_weights_cursor.close();
         // code sourced from https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/
         // sort all workouts by ID (Newest ID first),
         // with the newest first (i.e. reverse order of IDs)
@@ -810,7 +819,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<WeightsDto> getHeaviestChestLifts(){
+    public ArrayList<WeightsRecord> getHeaviestLifts(String type){
         SQLiteDatabase db = this.getReadableDatabase();
         String weightQuery = "SELECT " +
                 TABLE_WEIGHTS + "." + COLUMN_ID + ", " +
@@ -824,14 +833,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 " AND " + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +"=" + TABLE_EXERCISE_TYPE +"."+ COLUMN_EXERCISID +
                 " AND " + TABLE_EXERCISE_TYPE +"."+ COLUMN_TYPEID+"=" + TABLE_TYPE +"."+ COLUMN_ID+
                 " AND " + TABLE_WORKOUT_EXERCISE +"."+ COLUMN_EXERCISID +"=" + TABLE_EXERCISE +"."+ COLUMN_ID+
+                " AND " + TABLE_TYPE + "." + COLUMN_NAME + " == " + " '" + type + "' "+
                 " ORDER BY " + TABLE_WEIGHTS + "." + COLUMN_WEIGHT + " DESC LIMIT 3";
         Cursor weightRecords =db.rawQuery(weightQuery,null);
-        ArrayList<WeightsDto> weightsRecordsArrayList = new ArrayList<>();
+        ArrayList<WeightsRecord> weightsRecordsArrayList = new ArrayList<>();
         if (weightRecords.moveToFirst()) {
             do {
                 // on below line we are adding the data from
                 // cursor to our array list.
-                weightsRecordsArrayList.add(new WeightsDto(
+                weightsRecordsArrayList.add(new WeightsRecord(
                         weightRecords.getInt(0),
                         weightRecords.getString(1),
                         weightRecords.getString(2),

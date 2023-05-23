@@ -4,47 +4,59 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CardioRecord {
-    public static final String mType = "Cardio";
-    public String mExercise, mTime;
-    public int mId;
-    public float mDistance;
+    private static final String mType = "Cardio";
+    private String mExercise, mTime, mDate;
+    private int mId;
+    private float mDistance;
+
 
     public CardioRecord(){
-        mId = 0;
-        mExercise = "";
-        mTime = "";
-        mDistance = 0.0F;
+        this.mId = 0;
+        this.mExercise = "";
+        this.mTime = "";
+        this.mDistance = 0.0F;
+        this.mDate = "";
     }
 
     public CardioRecord(int id, String exercise, String time, Float distance) {
-        mId = id;
-        mExercise = exercise;
-        mTime = time;
-        mDistance = distance;
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mTime = time;
+        this.mDistance = distance;
+        this.mDate = "";
     }
 
     public CardioRecord(int id, String exercise, Float distance) {
-        mId = id;
-        mExercise = exercise;
-        mTime = "";
-        mDistance = distance;
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mTime = "";
+        this.mDistance = distance;
+        this.mDate = "";
     }
 
     public CardioRecord(int id, String exercise, String time) {
-        mId = id;
-        mExercise = exercise;
-        mTime = time;
-        mDistance = 0.0F;
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mTime = time;
+        this.mDistance = 0.0F;
+        this.mDate = "";
     }
 
-    public String getExercise() {
-        return mExercise;
+    public CardioRecord(int id, String exercise, String date, String time, Float distance) {
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mDate = date;
+        this.mTime = time;
+        this.mDistance = distance;
     }
+
+    public String getExercise() { return mExercise; }
+    public String getDate() { return mDate; }
     public int getId() {
         return mId;
     }
 
-    public String getmTime() {
+    public String getTime() {
         return mTime;
     }
 
@@ -52,19 +64,23 @@ public class CardioRecord {
         return mType;
     }
 
-    public float getmDistance() {
+    public float getDistance() {
         return mDistance;
     }
 
-    public void setmExercise(String exercise){
+    public void setExercise(String exercise){
         this.mExercise = exercise;
     }
 
-    public void setmTime(String time){
+    public void setDate(String date){
+        this.mDate = date;
+    }
+
+    public void setTime(String time){
         this.mTime = time;
     }
 
-    public void setmDistance(float distance){
+    public void setDistance(float distance){
         this.mDistance = distance;
     }
 

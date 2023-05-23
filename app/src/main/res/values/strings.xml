@@ -16,7 +16,7 @@
     <string name="fill_saved_status_text_w">WORKOUT NOT SAVED: PLEASE CHECK NAME, TYPE, SETS AND REPS</string>
     <string name="fill_saved_status_text_c">WORKOUT NOT SAVED: PLEASE CHECK NAME AND TIME OR DISTANCE</string>
     <string name="saved_status_text">WORKOUT SAVED</string>
-    <string name="invalid_time">WORKOUT NOT SAVED: CHECK TIME FORMAT IS HH:MM:SS</string>
+    <string name="invalid_time">WORKOUT NOT SAVED: CHECK TIME FORMAT IS HH:MM:SS (0:0:0 - 23:59:59)</string>
     <string-array name="type_options">
         <item>Abs</item>
         <item>Arms</item>

@@ -1,56 +1,48 @@
 package com.example.workouttracker;
 
 public class WeightsRecord {
-    public String mType;
-    public String mExercise;
-    public int mSets, mReps, mId;
-    public float mWeight;
-    private int mTypeId;
+    private String mType;
+    private String mExercise;
+    private int mSets, mReps, mId;
+    private float mWeight;
 
     public WeightsRecord(){
-        mId = 0;
-        mExercise = "";
-        mSets = 0;
-        mReps = 0;
-        mWeight = 0.0F;
-        mType = "";
+        this.mId = 0;
+        this.mExercise = "";
+        this.mSets = 0;
+        this.mReps = 0;
+        this.mWeight = 0.0F;
+        this.mType = "";
     }
 
     public WeightsRecord(int id, String exercise){
-        mId = id;
-        mExercise = exercise;
-        mSets = 1;
-        mReps = 1;
-        mWeight = 0.0F;
-        mType = "";
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mSets = 1;
+        this.mReps = 1;
+        this.mWeight = 0.0F;
+        this.mType = "";
     }
 
     public WeightsRecord(int id, String exercise, String type, float weight){
-        mId = id;
-        mExercise = exercise;
-        mType = type;
-        mWeight = weight;
-        mSets = 1;
-        mReps = 1;
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mType = type;
+        this.mWeight = weight;
+        this.mSets = 1;
+        this.mReps = 1;
     }
 
     public WeightsRecord(int id, String exercise, String type, int sets, int reps, float weight){
-        mId = id;
-        mExercise = exercise;
-        mType = type;
-        mSets = sets;
-        mReps = reps;
-        mWeight = weight;
+        this.mId = id;
+        this.mExercise = exercise;
+        this.mType = type;
+        this.mSets = sets;
+        this.mReps = reps;
+        this.mWeight = weight;
     }
 
-    public void setTypeId(int typeId) {
-        this.mTypeId = typeId;
-    }
 
-    // Getter
-    public int getTypeId() {
-        return this.mTypeId;
-    }
 
     public String getExercise() {
         return mExercise;
@@ -74,19 +66,19 @@ public class WeightsRecord {
         return mWeight;
     }
 
-    public void setmExercise(String mExercise){
+    public void setExercise(String mExercise){
         this.mExercise = mExercise;
     }
 
-    public void setmSets(int mSets){
+    public void setSets(int mSets){
         this.mSets = mSets;
     }
 
-    public void setmReps(int mReps){
+    public void setReps(int mReps){
         this.mReps = mReps;
     }
 
-    public void setmWeight(float mWeight){
+    public void setWeight(float mWeight){
         this.mWeight = mWeight;
     }
 
@@ -94,7 +86,7 @@ public class WeightsRecord {
         this.mId = Id;
     }
 
-    public void setmType(String type){mType = type;}
+    public void setType(String type){mType = type;}
 
     public boolean isEmpty() {
         return mId == 0 && mExercise.equals("") && mSets == 0 &&

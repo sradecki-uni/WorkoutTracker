@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Top 3 longest cardio sessions"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:layout_below="@id/statistics_title"
         android:layout_centerHorizontal="true"
@@ -89,15 +89,31 @@
 
     <TextView
         android:id="@+id/lifts_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top 3 heaviest chest lifts"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_width="265dp"
+        android:layout_height="23dp"
         android:layout_below="@id/idRVCardio"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="9dp"
+        android:layout_toStartOf="@+id/spinner_type_stats"
+        android:text="Top 3 heaviest lifts, Select type:"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinner_type_stats"
+        android:layout_width="106dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/idRVCardio"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="9dp"
+        android:layout_weight="1"
+        android:entries="@array/type_options"
+        android:minHeight="48dp" />
+
     <LinearLayout
         android:id="@+id/weightsHeader"
         android:layout_width="match_parent"

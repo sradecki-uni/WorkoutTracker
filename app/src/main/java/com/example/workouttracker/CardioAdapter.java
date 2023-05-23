@@ -45,7 +45,7 @@ public class CardioAdapter extends
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mCardioWorkout.get(getAdapterPosition()).
-                            setmExercise(exerciseView.getText().toString().strip());
+                            setExercise(exerciseView.getText().toString().strip());
                 }
 
                 @Override
@@ -63,7 +63,7 @@ public class CardioAdapter extends
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mCardioWorkout.get(getAdapterPosition()).
-                            setmTime(timeView.getText().toString());
+                            setTime(timeView.getText().toString());
                 }
 
                 @Override
@@ -89,7 +89,7 @@ public class CardioAdapter extends
                     // weights record object
                     if (!"".equals(distanceView.getText().toString())) {
                         mCardioWorkout.get(getAdapterPosition()).
-                                setmDistance(Float.parseFloat(distanceView.getText().toString()));
+                                setDistance(Float.parseFloat(distanceView.getText().toString()));
 
                     }
                 }
@@ -131,9 +131,9 @@ public class CardioAdapter extends
         EditText exerciseEditView = holder.exerciseView;
         exerciseEditView.setText(cardioRecord.getExercise());
         EditText timeEditView = holder.timeView;
-        timeEditView.setText(cardioRecord.getmTime());
+        timeEditView.setText(cardioRecord.getTime());
         EditText distanceEditView = holder.distanceView;
-        distanceEditView.setText(Float.toString(cardioRecord.getmDistance()));
+        distanceEditView.setText(Float.toString(cardioRecord.getDistance()));
 
         // make views uneditable if saved
         if(!cardioRecord.isEmpty()){
