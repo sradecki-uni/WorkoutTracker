@@ -79,7 +79,8 @@ public class Statistics extends AppCompatActivity{
         typeSpinner.setAdapter(adapter);
 
 
-        //
+        // when the slelected type changes update the list of weights records and notify the adapter
+        // to update the view
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
