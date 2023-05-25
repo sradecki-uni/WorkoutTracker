@@ -55,10 +55,11 @@ public class WorkoutRecord {
     public String getAllTypes(){
         if(mCardioRecords.isEmpty()){
             // return comma separated string of all unique weights types
-            return String.join(", ",
+            return "Weights-"+String.join(", ",
                     mWeightsRecords.stream().map(WeightsRecord::getType).distinct().collect(Collectors.toList()));
         }else if (mWeightsRecords.isEmpty()){
-            return "Cardio";
+            return "Cardio-"+String.join(", ",
+                    mCardioRecords.stream().map(CardioRecord::getExercise).distinct().collect(Collectors.toList()));
         }
         // if neither weights or cardio records exist return null
         return null;

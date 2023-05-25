@@ -1,6 +1,8 @@
 package com.example.workouttracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +13,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WorkoutAdapter.OnItemClickListener {
+    private ArrayList<WorkoutRecord> workoutArrayList;
+    private DBHandler dbHandler;
+    private WorkoutAdapter workoutAdapter;
+    private RecyclerView homeRV;
 
     public static final String WORKOUT_ID = "com.example.workouttracker.workoutid";
     @Override
@@ -19,7 +25,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // test code ///////////////////////////////////////
-        DBHandler dbHandler = new DBHandler(this, null, null, 1);
+        dbHandler = new DBHandler(this, null, null, 1);
+        workoutArrayList = new ArrayList<>();
+        workoutArrayList = dbHandler.getAllPreviousWorkouts();
+        workoutAdapter = new WorkoutAdapter(workoutArrayList,this,this);
+        homeRV = (RecyclerView) findViewById(R.id.idRVHome);
+        homeRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        // setting our adapter to recycler view.
+        homeRV.setAdapter(workoutAdapter);
         // ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
         // get string of the types
         // String allTypes = allWorkouts.get(12).getAllTypes();
@@ -50,6 +63,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        workoutAdapter.updateData();
+    }
+
+    @Override
+    public void onItemClick(WorkoutRecord wr) {
+        if(wr.isCardio()){
+            Intent myIntent = new Intent(this, CardioInput.class);
+            myIntent.putExtra(WORKOUT_ID,String.valueOf(wr.getmId()));
+            startActivity(myIntent);
+        }
+        else if(wr.isWeights()){
+            Intent myIntent = new Intent(this, WeightsInput.class);
+            //startActivity(myIntent);
+            myIntent.putExtra(WORKOUT_ID,String.valueOf(wr.getmId()));
+            startActivity(myIntent);
+        }
+    }
     public void addWeightsExercise(View view){
 
     }

@@ -4,68 +4,85 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
-
     <LinearLayout
         android:id="@+id/homebuttons"
-        android:layout_width="395dp"
-        android:layout_height="115dp"
-        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingTop="40dp"
-        android:paddingRight="16dp">
+        android:layout_marginTop="40dp">
 
         <Button
             android:id="@+id/button"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:onClick="newWeightsWorkout"
-            android:text="Weight Workout" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="2"
+            android:text="Weights Workout"
+            android:onClick="newWeightsWorkout"/>
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:onClick="newCardioWorkout"
-            android:text="Cardio Workout" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="2"
+            android:text="Cardio Workout"
+            android:onClick="newCardioWorkout"/>
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:onClick="newStatistics"
-            android:text="Workout Statistics" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="2"
+            android:text="Statistics"
+            android:onClick="newStatistics"/>
+
     </LinearLayout>
-    <TableLayout
-        android:id = "@+id/topworkouts"
+    <LinearLayout
+        android:id="@+id/tableHeader"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:stretchColumns="1"
-        android:padding="5dp"
-        android:layout_below="@+id/homebuttons">
-        <TableRow>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/homebuttons">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="Date"
+            android:textColor="#000000"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/Type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="Workout"
+            android:textColor="#000000"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <TextView
-                android:background="#33978B"
-                android:padding="3dip"
-                android:text="Date" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idRVHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tableHeader"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
 
-            <TextView
-                android:background="#8491D5"
-                android:gravity="right"
-                android:padding="3dip"
-                android:text="Workout" />
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:text="13/07/1998"
-                android:padding="3dip" />
-            <TextView
-                android:text="weights"
-                android:gravity="right"
-                android:padding="3dip" />
-        </TableRow>
-    </TableLayout>
 </RelativeLayout>
