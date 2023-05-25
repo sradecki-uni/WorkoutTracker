@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.On
         homeRV.setAdapter(workoutAdapter);
         // ArrayList<WorkoutRecord> allWorkouts = dbHandler.getAllPreviousWorkouts();
         // get string of the types
-        // String allTypes = allWorkouts.get(12).getAllTypes();
+        // String allTypes = allWorkouts.get(0).getAllTypes();
         // for choosing the type of intent can use isWeights() or isCardio on the WorkoutRecord
 //        boolean cardio = allWorkouts.get(allWorkouts.size() - 1).isCardio();
 //        boolean weights = allWorkouts.get(allWorkouts.size() - 2).isWeights();

@@ -799,7 +799,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 workoutID = workoutRecords_cardio_cursor.getInt(0);
                 int cardioID = workoutRecords_cardio_cursor.getInt(1);
                 db.delete(TABLE_CARDIO, COLUMN_ID + " = ?", new String[] {String.valueOf(cardioID)});
-                db.delete(TABLE_WORKOUT_EXERCISE, COLUMN_WEIGHTSID + " = ?",
+                db.delete(TABLE_WORKOUT_EXERCISE, COLUMN_CARDIOID + " = ?",
                         new String[] {String.valueOf(cardioID)});
 
             }

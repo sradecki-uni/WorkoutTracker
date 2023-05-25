@@ -105,6 +105,7 @@ public class Statistics extends AppCompatActivity{
 
     }
 
+    // code for back button sourced from https://www.geeksforgeeks.org/how-to-add-and-customize-back-button-of-action-bar-in-android/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

@@ -61,12 +61,13 @@ public class WeightsAdapter extends
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mWeightsWorkout.get(getAdapterPosition()).
-                            setExercise(exerciseView.getText().toString().strip());
+
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    mWeightsWorkout.get(getAdapterPosition()).
+                            setExercise(exerciseView.getText().toString().strip());
 
                 }
             });
@@ -212,6 +213,8 @@ public class WeightsAdapter extends
         EditText weightEditView = holder.weightView;
         weightEditView.setText(Float.toString(weightsRecord.getWeight()));
 
+        // if the workout has been save or if viewing an old workout
+        // make all views uneditable
         if(!weightsRecord.isEmpty()){
             exerciseEditView.setFocusable(false);
             typeSpinnerView.setEnabled(false);
