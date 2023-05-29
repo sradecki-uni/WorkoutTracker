@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp" >
+
     <LinearLayout
         android:id="@+id/homebuttons"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button"
@@ -18,10 +19,11 @@
             android:layout_weight="1"
             android:ellipsize="none"
             android:maxLines="2"
-            android:text="Weights Workout"
-            android:onClick="newWeightsWorkout"/>
+            android:onClick="newWeightsWorkout"
+            android:text="Weights Workout" />
+
         <Space
-            android:layout_width="16dp"
+            android:layout_width="12dp"
             android:layout_height="match_parent" />
 
         <Button
@@ -31,10 +33,11 @@
             android:layout_weight="1"
             android:ellipsize="none"
             android:maxLines="2"
-            android:text="Cardio Workout"
-            android:onClick="newCardioWorkout"/>
+            android:onClick="newCardioWorkout"
+            android:text="Cardio Workout" />
+
         <Space
-            android:layout_width="16dp"
+            android:layout_width="12dp"
             android:layout_height="match_parent" />
 
         <Button
@@ -44,8 +47,8 @@
             android:layout_weight="1"
             android:ellipsize="none"
             android:maxLines="2"
-            android:text="Statistics"
-            android:onClick="newStatistics"/>
+            android:onClick="newStatistics"
+            android:text="Statistics" />
 
     </LinearLayout>
     <LinearLayout

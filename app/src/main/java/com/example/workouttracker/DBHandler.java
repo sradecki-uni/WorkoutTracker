@@ -83,7 +83,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String CREATE_E_CARDIO_TABLE = "CREATE TABLE e_cardio (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
-                "time string DEFAULT '00:00:00', " +
+                "time TEXT DEFAULT '00:00:00', " +
                 "distance UNSIGNED FLOAT DEFAULT 0.0 );";
 
         String CREATE_R_EXERCISE_TYPE_TABLE = "CREATE TABLE r_exercise_type (" +
